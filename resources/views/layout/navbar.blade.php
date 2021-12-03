@@ -6,8 +6,8 @@
           <li><a class="nav-link scrollto" href="/#hero">Beranda</a></li>
           <li><a class="nav-link scrollto" href="/#about">Tentang</a></li>
           <li><a class="nav-link scrollto" href="/#register">Daftar</a></li>
-          <li><a class="nav-link scrollto" href="/#contact">Contact</a></li>
-          <li><a class="nav-link scrollto {{ Request::routeIs('login') ? 'active' : '' }}" href="/login">Login</a></li>
+          <li><a class="nav-link scrollto" href="/#contact">Kontak</a></li>
+          <li><a class="nav-link scrollto {{ Request::routeIs('login') || Request::routeIs('profile') ? 'active' : '' }}" href="{{ session('userdata_applicant') ? '/profile' : '/login' }}">{{ session('userdata_applicant')  ? 'Profil' : 'Login' }}</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>

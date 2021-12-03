@@ -5,7 +5,9 @@
       <i class="bi bi-phone-fill phone-icon"></i> +1 5589 55488 55
     </div>
     <div class="cta d-none d-md-block">
+      @if(!session('userdata_applicant'))
       <a href="#register" class="scrollto">Daftar</a>
+      @endif
     </div>
   </div>
 </div>

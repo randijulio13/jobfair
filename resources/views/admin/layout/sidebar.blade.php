@@ -21,6 +21,11 @@
             <i class="fas fa-user-tie    "></i>
             <span>Bidang Pekerjaan</span></a>
     </li>
+    <li class="nav-item {{ Request::routeIs('applicant') ? 'active' : '' }}">
+        <a class="nav-link" href="/admin/applicant">
+            <i class="fa fa-users" aria-hidden="true"></i>
+            <span>Data Pelamar</span></a>
+    </li>
     <hr class="sidebar-divider d-none d-md-block">
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>

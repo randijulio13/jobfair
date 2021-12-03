@@ -17,8 +17,8 @@ class AdminLoginController extends Controller
 
     function logout()
     {
-        Session::flush();
-        return response()->json(['status' => 200, 'message' => 'Anda berhasil logout'], 200);
+        session()->forget('userdata');
+        return redirect('/admin/login');
     }
 
     function index()
@@ -37,12 +37,12 @@ class AdminLoginController extends Controller
         ]);
         try {
             $user = DB::table('users')->where('username', '=', request('username'))->where('type', '=', 1)->first();
-            if (!$user) {
+            if (!$user)
                 throw new Exception('Username tidak ditemukan!', 404);
-            }
-            if (!Hash::check(request('password'), $user->password)) {
-                throw new Exception('Password salah!', 400);
-            }
+
+            if (!Hash::check(request('password'), $user->password))
+                throw new Exception('Password salah!', 401);
+
             $data = [
                 'id'    => $user->id,
                 'username'   => $user->username,

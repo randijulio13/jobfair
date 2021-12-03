@@ -1,5 +1,7 @@
 @extends('layout.app')
 
+@section('title','Beranda')
+
 @section('content')
 @include('layout.hero')
 @include('layout.content.about_us')
@@ -13,7 +15,7 @@
             </div>
             <div class="col-lg-9">
                 <form id="formToken">
-                    <input type="text" class="mb-2 form-control" name="token">
+                    <input type="text" class="mb-2 form-control" name="token" id="token">
                 </form>
             </div>
             <div class="col-lg-3 text-center">
@@ -38,33 +40,37 @@
                     <form id="formDaftarUser">
                         <div class="form-group mb-3">
                             <label for="name">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="name">
+                            <input type="text" class="form-control" name="name" id="name">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group mb-3">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username">
+                            <input type="text" class="form-control" name="username" id="username">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <!-- <div class="form-group mb-3">
                             <label for="email">Email</label>
-                            <input type="text" class="form-control" id="email">
+                            <input type="text" class="form-control" name="email">
                         </div>
                         <div class="form-group mb-3">
                             <label for="phone">Nomor HP</label>
-                            <input type="number" class="form-control" id="phone">
+                            <input type="number" class="form-control" name="phone">
                         </div> -->
                         <div class="form-group mb-3">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password">
+                            <input type="password" class="form-control" name="password" id="password">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group mb-3">
                             <label for="password_confirmation">Konfirmasi Password</label>
-                            <input type="password" class="form-control" id="password_confirmation">
+                            <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
+                            <div class="invalid-feedback"></div>
                         </div>
                     </form>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" form="formDaftarUser" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </div>

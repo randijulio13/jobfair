@@ -15,29 +15,33 @@ function errorValidasi(xhr) {
 
 $("#adminLogout").on("click", function (e) {
     e.preventDefault();
-    mySwal
-        .fire({
-            title: "Anda akan logout",
-            text: "Sesi akan dihapus! anda yakin?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Ya, logout",
-        })
-        .then((result) => {
-            if (result.isConfirmed) {
-                $.post("/admin/logout").then((res) => {
-                    mySwal
-                        .fire({
-                            title: "Berhasil",
-                            icon: "success",
-                            timer: 1500,
-                            showConfirmButton: false,
-                            text: res.message,
-                        })
-                        .then(() => (window.location.href = "/admin/login"));
-                });
-            }
-        });
+    Swal.fire({
+        title: "Anda akan logout",
+        text: "Sesi akan dihapus! anda yakin?",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+        showCancelButton: true,
+        confirmButtonText: "Ya, logout",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "/admin/logout";
+        }
+    });
+});
+$("#userLogout").on("click", function (e) {
+    e.preventDefault();
+    Swal.fire({
+        title: "Anda akan logout",
+        text: "Sesi akan dihapus! anda yakin?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ya, logout",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "/logout";
+        }
+    });
 });
 
 const mySwal = Swal.mixin({

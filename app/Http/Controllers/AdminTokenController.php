@@ -42,4 +42,24 @@ class AdminTokenController extends Controller
         $data = DB::table('applicant_tokens')->get();
         return datatables($data)->addIndexColumn()->toJson();
     }
+
+    function get($token)
+    {
+        try {
+            $check = DB::table('applicant_tokens')->where('token', '=', $token)->count();
+            if (!$check) {
+                throw new Exception('Token tidak ditemukan', 404);
+            }
+            $res = [
+                'status'    => 200,
+                'message'   => 'Token ditemukan'
+            ];
+        } catch (Exception $e) {
+            $res = [
+                'status'    => $e->getCode() ?? 400,
+                'message'   => $e->getMessage() ?? 'Terjadi kesalahan'
+            ];
+        }
+        return response()->json($res, $res['status']);
+    }
 }
