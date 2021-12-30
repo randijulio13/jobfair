@@ -24,6 +24,10 @@ class AuthApplicant
             return redirect('/login');
         }
 
+        $user = get_userdata_applicant();
+        if($user->status == 0)
+            return redirect('/logout');
+
         if ($request->is('/login'))
             return redirect('/profile');
 

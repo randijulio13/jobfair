@@ -23,6 +23,8 @@
                             <tr>
                                 <th width="10%">#</th>
                                 <th>Token</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

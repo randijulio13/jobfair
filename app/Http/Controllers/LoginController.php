@@ -12,7 +12,9 @@ class LoginController extends Controller
 {
     function index()
     {
-        return view('login');
+        if (!session('userdata_applicant'))
+            return view('login');
+        return redirect('profile');
     }
 
     function logout()
@@ -38,6 +40,8 @@ class LoginController extends Controller
                 throw new Exception('User tidak ditemukan!', 404);
             if (!Hash::check(request('password'), $user->password))
                 throw new Exception('Password salah!', 401);
+            if ($user->status == 0)
+                throw new Exception('Akun anda di nonaktifkan', 401);
             $data = [
                 'id'    => $user->id,
                 'username'   => $user->username,
@@ -45,8 +49,10 @@ class LoginController extends Controller
                 'type'       => $user->type,
                 'login_ip'   => request()->ip(),
                 'login_time' => date('H:i:s'),
+                'status'    => $user->status
             ];
             Session::put('userdata_applicant', $data);
+
             $res = [
                 'status'    => 200,
                 'message'   => 'Login berhasil'

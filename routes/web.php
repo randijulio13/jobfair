@@ -2,13 +2,20 @@
 
 use App\Http\Controllers\AdminApplicantController;
 use App\Http\Controllers\AdminCareerFieldController;
+use App\Http\Controllers\AdminConfigController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\AdminMessageController;
+use App\Http\Controllers\AdminSponsorController;
 use App\Http\Controllers\AdminTokenController;
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminVacancyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VacancyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,13 +33,25 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::get('logout', [LoginController::class, 'logout']);
 Route::get('token/{token}', [AdminTokenController::class, 'get']);
+Route::prefix('loker')->group(function () {
+    Route::get('', [VacancyController::class, 'index'])->name('vacancy');
+    Route::get('detail/{id}', [VacancyController::class, 'detail'])->name('detail_vacancy');
+    Route::post('', [VacancyController::class, 'store']);
+});
 Route::post('login', [LoginController::class, 'login']);
-Route::post('user/{token}', [UserController::class, 'store']);
+Route::post('user/{token?}', [UserController::class, 'register']);
+Route::post('message',[MessageController::class,'store']);
+Route::get('check_login', [ProfileController::class, 'check_login']);
 
 Route::prefix('profile')->middleware('auth.applicant')->group(function () {
     Route::get('', [ProfileController::class, 'index'])->name('profile');
-    Route::post('',[ProfileController::class,'update']);
+    Route::get('history',[ProfileController::class,'vacancy_history'])->name('vacancy_history');
+    Route::get('notification',[ProfileController::class,'notification'])->name('notification');
+    Route::delete('notification/{id}',[ProfileController::class,'delete_notif']);
+    Route::post('payment',[ProfileController::class,'payment']);
+    Route::post('', [ProfileController::class, 'update']);
 });
+
 
 Route::prefix('admin')->middleware('auth.admin')->group(function () {
     Route::get('', [AdminDashboardController::class, 'index'])->name('dashboard_admin');
@@ -41,25 +60,63 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
     Route::get('logout', [AdminLoginController::class, 'logout']);
     Route::post('login', [AdminLoginController::class, 'login']);
 
-    Route::prefix('applicant')->group(function(){
-        Route::get('',[AdminApplicantController::class,'index'])->name('applicant');
-        Route::get('datatables',[AdminApplicantController::class,'datatables']);
+    Route::prefix('config')->group(function(){
+        Route::get('',[AdminConfigController::class,'index'])->name('admin.config');
     });
 
-    Route::prefix('token')->group(function () {
+    Route::prefix('message')->group(function(){
+        Route::get('',[AdminMessageController::class,'index'])->name('admin.message');
+        Route::get('datatables',[AdminMessageController::class,'datatables']);
+        Route::get('{id}',[AdminMessageController::class,'detail'])->name('admin.message_detail');
+        Route::post('',[AdminMessageController::class,'store']);
+    });
+
+    Route::prefix('applicant')->group(function () {
+        Route::get('', [AdminApplicantController::class, 'index'])->name('applicant');
+        Route::get('datatables', [AdminApplicantController::class, 'datatables']);
+    });
+
+    Route::prefix('token')->middleware('auth.role:1')->group(function () {
         Route::get('', [AdminTokenController::class, 'index'])->name('token');
         Route::get('datatable', [AdminTokenController::class, 'datatable']);
         Route::get('{token}', [AdminTokenController::class, 'get']);
-
         Route::post('generate', [AdminTokenController::class, 'generate']);
+        Route::delete('{id}',[AdminTokenController::class,'delete']);
     });
 
-    Route::prefix('field')->group(function () {
+    Route::prefix('vacancy')->group(function () {
+        Route::get('', [AdminVacancyController::class, 'index'])->name('admin.vacancy');
+        Route::get('datatables', [AdminVacancyController::class, 'datatables']);
+        Route::get('datatables/{id}', [AdminVacancyController::class, 'datatables_detail']);
+        Route::get('{id}',[AdminVacancyController::class,'detail'])->name('admin.detail.vacancy');
+        Route::post('', [AdminVacancyController::class, 'store']);
+        Route::post('set_seen',[AdminVacancyController::class,'set_seen']);
+        Route::patch('{id}', [AdminVacancyController::class, 'update']);
+        Route::patch('status/{id}', [AdminVacancyController::class, 'update_status']);
+    });
+
+    Route::prefix('field')->middleware('auth.role:1')->group(function () {
         Route::get('', [AdminCareerFieldController::class, 'index'])->name('career_field');
         Route::get('datatable', [AdminCareerFieldController::class, 'datatable']);
         Route::get('{id}', [AdminCareerFieldController::class, 'get']);
         Route::post('', [AdminCareerFieldController::class, 'store']);
         Route::patch('{id}', [AdminCareerFieldController::class, 'update']);
         Route::delete('{id}', [AdminCareerFieldController::class, 'delete']);
+    });
+
+    Route::prefix('user')->middleware('auth.role:1')->group(function () {
+        Route::get('datatables/{type}', [AdminUserController::class, 'datatables']);
+        Route::get('{type}', [AdminUserController::class, 'index'])->name('user');
+        Route::post('notif',[AdminUserController::class,'send_notif']);
+        Route::patch('{id}', [AdminUserController::class, 'update_status']);
+    });
+
+    Route::prefix('sponsor')->middleware('auth.role:1')->group(function () {
+        Route::get('', [AdminSponsorController::class, 'index'])->name('sponsor');
+        Route::get('datatables', [AdminSponsorController::class, 'datatables']);
+        Route::get('{id}', [AdminSponsorController::class, 'get']);
+        Route::post('', [AdminSponsorController::class, 'store']);
+        Route::post('{id}', [AdminSponsorController::class, 'update']);
+        Route::patch('{id}', [AdminSponsorController::class, 'update_status']);
     });
 });

@@ -1,11 +1,11 @@
 $(function () {
-    $('#modalRegister').on('shown.bs.modal',function(){
-        $('#name').focus()
-    })
+    $("#modalRegister").on("shown.bs.modal", function () {
+        $("#name").focus();
+    });
 
     $("#formDaftarUser").on("submit", function (e) {
         e.preventDefault();
-        $('.is-invalid').removeClass('is-invalid')
+        $(".is-invalid").removeClass("is-invalid");
         let data = $(this).serialize();
         let token = $("#token").val();
         if (!token) {
@@ -49,6 +49,27 @@ $(function () {
                     });
                 }
             });
+    });
+
+    $("#formMessage").on("submit", async function (e) {
+        e.preventDefault();
+        let data = $(this).serialize();
+        try{
+            let res = await $.post("/message", data);
+            if(res){
+                await Swal.fire({
+                    title:'Berhasil',
+                    html:'Pesan anda berhasil dikirim <br> kami akan membalas pesan anda melalui whatsapp. Pastikan nomor whatsapp anda aktif.',
+                    timer:1500,
+                    icon:'success',
+                    showConfirmButton:false,
+                    timerProgressBar:true
+                })
+                window.location.reload()
+            }
+        }catch(err){
+            console.log(err)
+        }
     });
 
     $("#formToken").on("submit", function (e) {

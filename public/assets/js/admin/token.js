@@ -1,4 +1,6 @@
 $(function () {
+    let selectedId;
+
     $("#btnTambah").click(function (e) {
         e.preventDefault();
         let quantity = $("#quantity").val();
@@ -11,7 +13,7 @@ $(function () {
                     timer: 1500,
                     showConfirmButton: false,
                 });
-                table.ajax.reload()
+                table.ajax.reload();
             })
             .catch((err) => {
                 mySwal.fire({
@@ -35,7 +37,32 @@ $(function () {
         ajax: {
             url: "/admin/token/datatable",
         },
-        order: [[0, "desc"]],
-        columns: [{ data: "DT_RowIndex" }, { data: "token" }],
+        order: [[1, "desc"]],
+        columns: [
+            { data: "DT_RowIndex", orderable: false },
+            { data: "token" },
+            { data: "status", class: "text-center", orderable: false },
+            { data: "aksi", class: "text-center", orderable: false },
+        ],
+    });
+
+    $(document).on("click", ".btn-hapus", async function (e) {
+        e.preventDefault();
+        selectedId = $(this).parents("tr").attr("id");
+        $.ajax({
+            url: `/admin/token/${selectedId}`,
+            dataType: "json",
+            type: "delete",
+        }).then((res) => {
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil",
+                timer: 1500,
+                showConfirmButton: false,
+                timerProgressBar: true,
+                text: "Token berhasil dihapus",
+            });
+            table.ajax.reload();
+        });
     });
 });

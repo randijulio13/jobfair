@@ -19,7 +19,7 @@
                 </form>
             </div>
             <div class="col-lg-3 text-center">
-                <button class="btn-block form-control btn btn-warning" form="formToken" type="submit">Submit</butotn>
+                <button id="btnFormToken" class="btn-block form-control btn btn-warning" form="formToken" type="submit">Submit</butotn>
             </div>
             <div class="col-lg-12">
                 <a href="#" class="text-white">Belum mempunyai nomor token?</a>
@@ -48,14 +48,16 @@
                             <input type="text" class="form-control" name="username" id="username">
                             <div class="invalid-feedback"></div>
                         </div>
-                        <!-- <div class="form-group mb-3">
+                        <div class="form-group mb-3">
                             <label for="email">Email</label>
-                            <input type="text" class="form-control" name="email">
+                            <input type="text" class="form-control" name="email" id="email">
+                            <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group mb-3">
                             <label for="phone">Nomor HP</label>
-                            <input type="number" class="form-control" name="phone">
-                        </div> -->
+                            <input type="number" class="form-control" name="phone" id="phone">
+                            <div class="invalid-feedback"></div>
+                        </div>
                         <div class="form-group mb-3">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" name="password" id="password">

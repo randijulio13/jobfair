@@ -578,7 +578,6 @@ section {
 # About Us
 --------------------------------------------------------------*/
 .about {
-  padding: 140px 0;
   background: url("../img/about-bg.png") top center no-repeat;
   position: relative;
 }
@@ -1830,6 +1829,7 @@ section {
 .blog .sidebar .sidebar-item {
   margin-bottom: 30px;
 }
+
 .blog .sidebar .search-form form {
   background: #fff;
   border: 1px solid #ddd;

@@ -36,7 +36,7 @@ class AdminLoginController extends Controller
             'password.required' => 'Password harus diisi'
         ]);
         try {
-            $user = DB::table('users')->where('username', '=', request('username'))->where('type', '=', 1)->first();
+            $user = DB::table('users')->where('username', '=', request('username'))->where('type', '!=', 3)->first();
             if (!$user)
                 throw new Exception('Username tidak ditemukan!', 404);
 

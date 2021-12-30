@@ -12,6 +12,14 @@ function errorValidasi(xhr) {
             .text(value[0]);
     });
 }
+function errorValidasiName(xhr) {
+    return $.each(xhr.responseJSON.errors, function (index, value) {
+        $(`input[name="${index}"]`)
+            .addClass("is-invalid")
+            .siblings("div.invalid-feedback")
+            .text(value[0]);
+    });
+}
 
 $("#adminLogout").on("click", function (e) {
     e.preventDefault();
@@ -28,7 +36,7 @@ $("#adminLogout").on("click", function (e) {
         }
     });
 });
-$("#userLogout").on("click", function (e) {
+$(".userLogout").on("click", function (e) {
     e.preventDefault();
     Swal.fire({
         title: "Anda akan logout",
@@ -51,3 +59,4 @@ const mySwal = Swal.mixin({
     },
     buttonsStyling: false,
 });
+

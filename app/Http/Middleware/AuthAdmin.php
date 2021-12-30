@@ -29,7 +29,6 @@ class AuthAdmin
 
         if (!session('userdata')['type'] == 1)
             return redirect('/admin/login');
-
         return $next($request);
     }
 }

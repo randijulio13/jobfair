@@ -40,7 +40,23 @@ class AdminTokenController extends Controller
     function datatable()
     {
         $data = DB::table('applicant_tokens')->get();
-        return datatables($data)->addIndexColumn()->toJson();
+        return datatables($data)
+            ->addIndexColumn()
+            ->setRowId(function ($data) {
+                return $data->id;
+            })
+            ->addColumn('aksi', function () {
+                return '<a class="btn btn-sm btn-danger btn-hapus"><i class="fa fa-trash-alt"></i> Hapus</a>';
+            })
+            ->addColumn('status', function ($data) {
+                $checked = $data->status ? 'checked'  : '';
+                return '<div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input status-sponsor" ' . $checked . ' id="status' . $data->id . '">
+                <label class="custom-control-label" for="status' . $data->id . '"></label>
+              </div>';
+            })
+            ->rawColumns(['aksi','status'])
+            ->toJson();
     }
 
     function get($token)
@@ -61,5 +77,11 @@ class AdminTokenController extends Controller
             ];
         }
         return response()->json($res, $res['status']);
+    }
+
+    function delete($id)
+    {
+        DB::table('applicant_tokens')->where('id','=',$id)->delete();
+        return true;
     }
 }
