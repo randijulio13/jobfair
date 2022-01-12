@@ -147,6 +147,6 @@ $(function () {
             url: "/admin/field/datatable",
         },
         order: [[0, "desc"]],
-        columns: [{ data: "DT_RowIndex" }, { data: "name" }, { data: "aksi" }],
+        columns: [{ data: "DT_RowIndex",orderable:false,class:'text-center' }, { data: "name" }, { data: "aksi",orderable:false,class:'text-center' }],
     });
 });

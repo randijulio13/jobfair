@@ -21,6 +21,52 @@ function errorValidasiName(xhr) {
     });
 }
 
+$("#modalPassword").on("hidden.bs.modal", function () {
+    $("#formPassword").trigger("reset");
+});
+
+$("#modalPassword").on("shown.bs.modal", function () {
+    $("#old_password").focus();
+});
+
+$("#gantiPassword").on("click", function (e) {
+    e.preventDefault();
+    $("#modalPassword").modal("show");
+});
+
+$("#formPassword").on("submit", async function (e) {
+    e.preventDefault();
+    $(this).find('.is-invalid').removeClass('is-invalid')
+    let data = $(this).serialize();
+    try {
+        let res = await $.ajax({
+            type: "patch",
+            url: "/admin/password",
+            data,
+            dataType: "json",
+        });
+        Swal.fire({
+            icon: "success",
+            title: "Berhasil",
+            text: res.message,
+            timer: 1500,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        });
+        $('#modalPassword').modal('hide')
+    } catch (err) {
+        if (err.status == 422) return errorValidasi(err);
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: err.responseJSON.message,
+            timer: 5000,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        });
+    }
+});
+
 $("#adminLogout").on("click", function (e) {
     e.preventDefault();
     Swal.fire({
@@ -59,4 +105,3 @@ const mySwal = Swal.mixin({
     },
     buttonsStyling: false,
 });
-

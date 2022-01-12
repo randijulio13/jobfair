@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,12 +11,30 @@ class AdminApplicantController extends Controller
 {
     function index()
     {
+        $career_fields = DB::table('career_fields')->get();
+        $sponsor = DB::table('sponsors')->where('user_id', '=', session('userdata')['id'])->first();
+        if (session('userdata')['type'] == 2) {
+            $sponsor_fields = DB::table('sponsor_fields')->where('sponsor_id', '=', $sponsor->id)->get();
+            if ($sponsor->type == 3)
+                return view('admin/applicant');
+
+            $selected = DB::table('sponsor_fields')->where('sponsor_id', '=', $sponsor->id)->get();
+
+            $field_total = $sponsor->type == 2 ? 2 : 0;
+
+            if (count($selected) == $field_total)
+                return view('admin/applicant');
+
+
+
+            return view('admin/select_field', compact('career_fields', 'sponsor_fields', 'field_total'));
+        }
         return view('admin/applicant');
     }
 
     function datatables()
     {
-        $data = DB::table('applicant_datas as ad')->join('users as u', 'u.id', '=', 'ad.user_id')->select('ad.*', 'u.status')->where('u.status','=',1)->get();
+        $data = DB::table('applicant_datas as ad')->join('users as u', 'u.id', '=', 'ad.user_id')->select('ad.*', 'u.status', 'u.email', 'u.phone')->where('u.status', '=', 1)->get();
         return datatables($data)
             ->setRowId(function ($data) {
                 return $data->id;
@@ -27,6 +46,8 @@ class AdminApplicantController extends Controller
                 return $data->name . '<br><small><ul>
                 <li>Umur: ' . $age . ' tahun</li>
                 <li>Jenis Kelamin: ' . $gender . '</li>
+                <li>Nomor HP: ' . hp($data->phone) . '</li>
+                <li>Email: ' . $data->email . '</li>
                 </ul></small>';
             })
             ->addColumn('last_edu', function ($data) {
@@ -36,7 +57,7 @@ class AdminApplicantController extends Controller
             })
             ->addColumn('aksi', function ($data) {
                 $disabled = $data->file == null ? 'disabled' : '';
-                return '<a href="/assets/cv/' . $data->file . '" target="_blank" class="btn btn-primary btn-sm ' . $disabled . '"><i class="fas fa-file"></i> Lihat PDF</a>';
+                return '<a href="/assets/cv/' . $data->file . '" target="_blank" class="btn btn-primary btn-sm ' . $disabled . '"><i class="fas fa-file"></i> Lihat PDF</a>&nbsp; <div class="btn-group"><a class="btn btn-success btn-sm" target="_blank" href="https://wa.me/'.hp($data->phone).'"><i class="fas fa-phone"></i> WA</a><a class="btn btn-danger btn-sm"  href="mailto:'.$data->email.'" target="_blank"><i class="fas fa-envelope"></i> Email</a></div>';
             })
             ->addColumn('fields', function ($data) {
                 $fields = DB::table('applicant_fields')->where('applicant_id', '=', $data->id)->get();
@@ -52,5 +73,32 @@ class AdminApplicantController extends Controller
             })
             ->rawColumns(['name', 'last_edu', 'aksi', 'fields'])
             ->toJson();
+    }
+
+
+
+    function sponsor(Request $request)
+    {
+        DB::beginTransaction();
+        $fields = $request->fields;
+        $sponsor = DB::table('sponsors')->where('user_id', '=', session('userdata')['id'])->first();
+
+        $sponsor_id = $sponsor->id;
+        try {
+            $data = [];
+            foreach ($fields as $f) {
+                $data[] = [
+                    'field_id'  => $f,
+                    'sponsor_id'  => $sponsor_id
+                ];
+            }
+            DB::table('sponsor_fields')->where('sponsor_id', '=', $sponsor_id)->delete();
+            DB::table('sponsor_fields')->insert($data);
+            DB::commit();
+            return response()->json(['status' => 200, 'message' => 'OK']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['status' => 400, 'message' => 'Error']);
+        }
     }
 }

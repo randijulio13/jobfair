@@ -19,4 +19,23 @@ $(function () {
             { data: "aksi" },
         ],
     });
+
+    $(".js-example-basic-multiple").select2({
+        maximumSelectionLength: 2
+    });
+
+    $("#formField").on("submit", async function (e) {
+        e.preventDefault();
+        let data = $(this).serialize();
+        let res = await $.post("/admin/applicant/sponsor", data);
+        await Swal.fire({
+            icon: "success",
+            title: "Berhasil",
+            text: "Data berhasil disimpan",
+            timer: 3000,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        });
+        window.location.reload();
+    });
 });

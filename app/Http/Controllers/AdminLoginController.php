@@ -64,4 +64,24 @@ class AdminLoginController extends Controller
         }
         return response()->json($res, $res['status']);
     }
+
+    function password(Request $request)
+    {
+        $request->validate([
+            'old_password'  => ['required'],
+            'new_password'  => ['required', 'confirmed'],
+        ]);
+        try {
+            DB::beginTransaction();
+            $user = get_userdata();
+            if (!Hash::check(request('old_password'), $user->password))
+                throw new Exception('Password lama salah', 401);
+            $password = Hash::make(request('new_password'));
+            DB::table('users')->where('id', '=', session('userdata')['id'])->update(['password' => $password]);
+            DB::commit();
+            return response()->json(['status' => 200, 'message' => 'Password berhasil diubah'], 200);
+        } catch (Exception $e) {
+            return response()->json(['status' => $e->getCode() ?? 400, 'message' => $e->getMessage() ?? 'Error'], 400);
+        }
+    }
 }

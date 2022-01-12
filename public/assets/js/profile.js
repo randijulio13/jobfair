@@ -58,16 +58,95 @@ $(function () {
             contentType: false,
             cache: false,
             dataType: "json",
-        }).then(async (res)=>{
+        }).then(async (res) => {
             await Swal.fire({
-                icon:'success',
-                title:'Berhasil',
-                text:'Bukti pembayaran anda berhasil disubmit',
-                timer:1500,
-                showConfirmButton:false,
-                timerProgressBar:true,
-            })
-            window.location.reload()
+                icon: "success",
+                title: "Berhasil",
+                text: "Bukti pembayaran anda berhasil disubmit",
+                timer: 1500,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+            window.location.reload();
         });
+    });
+
+    $("#gantiPassword").on("click", function (e) {
+        e.preventDefault();
+        $("#modalPassword").modal("show");
+    });
+
+    $("#modalPassword").on("hidden.bs.modal", function () {
+        $("#formPassword").trigger("reset");
+    });
+
+    $("#modalPassword").on("shown.bs.modal", function () {
+        $("#old_password").focus();
+    });
+
+    $("#formAccount").on("submit", async function (e) {
+        e.preventDefault();
+        $(this).find('.is-invalid').removeClass('is-invalid')
+        let data = $(this).serialize();
+        try {
+            let res = await $.ajax({
+                type: "patch",
+                url: "/profile",
+                data,
+                dataType: "json",
+            });
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil",
+                text: res.message,
+                timer: 1500,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+            $("#modalPassword").modal("hide");
+        } catch (err) {
+            if (err.status == 422) return errorValidasi(err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: err.responseJSON.message,
+                timer: 5000,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+        }
+    });
+
+    $("#formPassword").on("submit", async function (e) {
+        e.preventDefault();
+        $(this).find(".is-invalid").removeClass("is-invalid");
+        let data = $(this).serialize();
+        try {
+            let res = await $.ajax({
+                type: "patch",
+                url: "/profile/password",
+                data,
+                dataType: "json",
+            });
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil",
+                text: res.message,
+                timer: 1500,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+            $("#modalPassword").modal("hide");
+        } catch (err) {
+            if (err.status == 422) return errorValidasi(err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: err.responseJSON.message,
+                timer: 5000,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+        }
     });
 });

@@ -14,8 +14,9 @@ class ProfileController extends Controller
     {
         $data = DB::table('applicant_datas')->where('user_id', '=', session('userdata_applicant')['id'])->first();
         $user = DB::table('users')->where('id', '=', session('userdata_applicant')['id'])->first();
+        $payments = DB::table('payment_methods')->where('status', '=', 1)->get();
         if ($user->status != 1)
-            return view('profile_inactive', compact('data', 'user'));
+            return view('profile_inactive', compact('data', 'user', 'payments'));
         $isComplete = 0;
 
         $career_fields = DB::table('career_fields')->get();
@@ -26,6 +27,12 @@ class ProfileController extends Controller
                 $isComplete++;
         }
         return view('profile', compact('data', 'isComplete', 'career_fields', 'applicant_fields'));
+    }
+
+    function account()
+    {
+        $userdata = get_userdata_applicant();
+        return view('profile_account', compact('userdata'));
     }
 
     private function update_fields($fields, $applicant_id)
@@ -150,21 +157,21 @@ class ProfileController extends Controller
 
     function notification()
     {
-        $notifications = DB::table('messages')->where('receiver_id', '=', session('userdata_applicant')['id'])->orderBy('created_at','desc')->paginate(6);
+        $notifications = DB::table('messages')->where('receiver_id', '=', session('userdata_applicant')['id'])->orderBy('created_at', 'desc')->paginate(6);
         return view('notification', compact('notifications'));
     }
 
     function delete_notif($id)
     {
-        DB::table('messages')->where('id','=',$id)->delete();
-        DB::table('new_messages')->where('message_id','=',$id)->delete();
+        DB::table('messages')->where('id', '=', $id)->delete();
+        DB::table('new_messages')->where('message_id', '=', $id)->delete();
         return true;
     }
 
     function payment(Request $request)
     {
         $request->validate([
-            'attachment'  => ['required','mimes:jpg,bmp,png,jpeg'],
+            'attachment'  => ['required', 'mimes:jpg,bmp,png,jpeg'],
         ]);
         try {
             DB::beginTransaction();
@@ -213,7 +220,7 @@ class ProfileController extends Controller
                 'message_id'    => $notif_id,
                 'user_id'   => session('userdata_applicant')['id']
             ]);
-            DB::table('users')->where('id', '=', $user->id)->update(['status'=>2]);
+            DB::table('users')->where('id', '=', $user->id)->update(['status' => 2]);
             $image->move('assets/img/payment/', $namaFileBaru);
             DB::commit();
             $res = [
@@ -229,5 +236,45 @@ class ProfileController extends Controller
         }
 
         return response()->json($res);
+    }
+
+    function password(Request $request)
+    {
+        $request->validate([
+            'old_password'  => ['required'],
+            'new_password'  => ['required', 'confirmed'],
+        ]);
+        try {
+            DB::beginTransaction();
+            $user = get_userdata_applicant();
+            if (!Hash::check(request('old_password'), $user->password))
+                throw new Exception('Password lama salah', 401);
+            $password = Hash::make(request('new_password'));
+            DB::table('users')->where('id', '=', session('userdata_applicant')['id'])->update(['password' => $password]);
+            DB::commit();
+            return response()->json(['status' => 200, 'message' => 'Password berhasil diubah'], 200);
+        } catch (Exception $e) {
+            return response()->json(['status' => $e->getCode() ?? 400, 'message' => $e->getMessage() ?? 'Error'], 400);
+        }
+    }
+
+    function update_account(Request $request)
+    {
+        $request->validate([
+            'email'  => ['required'],
+            'phone'  => ['required'],
+        ]);
+        try {
+            DB::beginTransaction();
+            $data = [
+                'email' => request('email'),
+                'phone' => request('phone')
+            ];
+            DB::table('users')->where('id', '=', session('userdata_applicant')['id'])->update($data);
+            DB::commit();
+            return response()->json(['status' => 200, 'message' => 'Data berhasil diubah'], 200);
+        } catch (Exception $e) {
+            return response()->json(['status' => $e->getCode() ?? 400, 'message' => $e->getMessage() ?? 'Error'], 400);
+        }
     }
 }

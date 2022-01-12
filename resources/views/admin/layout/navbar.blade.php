@@ -10,6 +10,10 @@
                 <img class="img-profile rounded-circle" src="/assets/img/{{ get_logo(session('userdata')['id']) }}">
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#" id="gantiPassword">
+                    <i class="fas fa-lock fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Ganti Password
+                </a>
                 <a class="dropdown-item" href="#" id="adminLogout">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout
