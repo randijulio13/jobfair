@@ -67,6 +67,7 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
 
     Route::prefix('config')->middleware('auth.role:1')->group(function () {
         Route::get('', [AdminConfigController::class, 'index'])->name('admin.config');
+        Route::patch('',[AdminConfigController::class,'update']);
     });
 
     Route::prefix('message')->group(function () {

@@ -12,7 +12,6 @@ $(function () {
                 confirmButtonText: "Kirim",
                 confirmButtonColor: "#3085d6",
                 inputAttributes: {
-                    maxlength: 10,
                     autocapitalize: "off",
                     autocorrect: "off",
                 },

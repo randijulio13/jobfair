@@ -26,8 +26,9 @@ class AdminVacancyController extends Controller
     function datatables_detail($id)
     {
         $data = DB::table('vacancy_applicants as va')
-            ->select('ad.*', 'va.created_at as sent_at')
+            ->select('ad.*', 'va.created_at as sent_at', 'u.phone', 'u.email')
             ->join('applicant_datas as ad', 'ad.id', '=', 'va.applicant_id')
+            ->join('users as u', 'u.id', '=', 'ad.user_id')
             ->where('va.vacancy_id', '=', $id)
             ->get();
         // $data = DB::table('applicant_datas')->get();
@@ -49,7 +50,7 @@ class AdminVacancyController extends Controller
             })
             ->addColumn('aksi', function ($data) {
                 $disabled = $data->file == null ? 'disabled' : '';
-                return '<a href="/assets/cv/' . $data->file . '" target="_blank" class="btn btn-download btn-primary btn-sm ' . $disabled . '"><i class="fas fa-file"></i> Lihat PDF</a>';
+                return '<div class="btn-group"><a href="/assets/cv/' . $data->file . '" target="_blank" class="btn btn-primary btn-sm ' . $disabled . '"><i class="fas fa-file"></i> CV</a><a class="btn btn-success btn-sm" target="_blank" href="https://wa.me/' . hp($data->phone) . '"><i class="fas fa-phone"></i> WA</a><a class="btn btn-danger btn-sm"  href="mailto:' . $data->email . '" target="_blank"><i class="fas fa-envelope"></i> Email</a></div>';
             })
             ->addColumn('fields', function ($data) {
                 $fields = DB::table('applicant_fields')->where('applicant_id', '=', $data->id)->get();
@@ -115,7 +116,7 @@ class AdminVacancyController extends Controller
         return $vacancy;
     }
 
-    function update(Request $request,$id)
+    function update(Request $request, $id)
     {
         $request->validate(
             [

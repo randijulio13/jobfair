@@ -34,17 +34,36 @@ class AdminApplicantController extends Controller
 
     function datatables()
     {
-        $data = DB::table('applicant_datas as ad')->join('users as u', 'u.id', '=', 'ad.user_id')->select('ad.*', 'u.status', 'u.email', 'u.phone')->where('u.status', '=', 1)->get();
-        return datatables($data)
+        $sponsor_id = DB::table('users as u')->join('sponsors as s', 's.user_id', '=', 'u.id')->where('u.id', '=', session('userdata')['id'])->value('s.id');
+        $data = DB::table('applicant_fields as af')
+            ->select('ad.*', 'u.phone', 'u.email')
+            ->join('applicant_datas as ad', 'ad.id', '=', 'af.applicant_id')
+            ->join('users as u', 'u.id', '=', 'ad.user_id')
+            ->where('u.status', '=', 1);
+        if (session('userdata')['type'] != 1) {
+            $fields = DB::table('sponsor_fields as sf')
+                ->where('sf.sponsor_id', '=', $sponsor_id)
+                ->get();
+
+            $data = $data->where('ad.file', '!=', null)
+                ->where(function ($q) use ($fields) {
+                    foreach ($fields as $f) {
+                        $q->orWhere('field_id', '=', $f->field_id);
+                    }
+                });
+        }
+        $data = $data->groupBy('af.applicant_id');
+
+        return datatables($data->get())
             ->setRowId(function ($data) {
                 return $data->id;
             })
             ->addIndexColumn()
             ->addColumn('name', function ($data) {
-                $gender = $data->gender == 'L' ? 'Laki-laki' : 'Perempuan';
-                $age = Carbon::parse($data->dob)->diff(Carbon::now())->y;
+                $gender = $data->gender == 'L' ? 'Laki-laki' : ($data->gender == 'P' ? 'Perempuan' : '-');
+                $age = $data->dob ? Carbon::parse($data->dob)->diff(Carbon::now())->y . ' tahun' : '-';
                 return $data->name . '<br><small><ul>
-                <li>Umur: ' . $age . ' tahun</li>
+                <li>Umur: ' . $age . '</li>
                 <li>Jenis Kelamin: ' . $gender . '</li>
                 <li>Nomor HP: ' . hp($data->phone) . '</li>
                 <li>Email: ' . $data->email . '</li>
@@ -57,7 +76,7 @@ class AdminApplicantController extends Controller
             })
             ->addColumn('aksi', function ($data) {
                 $disabled = $data->file == null ? 'disabled' : '';
-                return '<a href="/assets/cv/' . $data->file . '" target="_blank" class="btn btn-primary btn-sm ' . $disabled . '"><i class="fas fa-file"></i> Lihat PDF</a>&nbsp; <div class="btn-group"><a class="btn btn-success btn-sm" target="_blank" href="https://wa.me/'.hp($data->phone).'"><i class="fas fa-phone"></i> WA</a><a class="btn btn-danger btn-sm"  href="mailto:'.$data->email.'" target="_blank"><i class="fas fa-envelope"></i> Email</a></div>';
+                return '<div class="btn-group"><a href="/assets/cv/' . $data->file . '" target="_blank" class="btn btn-primary btn-sm ' . $disabled . '"><i class="fas fa-file"></i> CV</a><a class="btn btn-success btn-sm" target="_blank" href="https://wa.me/' . hp($data->phone) . '"><i class="fas fa-phone"></i> WA</a><a class="btn btn-danger btn-sm"  href="mailto:' . $data->email . '" target="_blank"><i class="fas fa-envelope"></i> Email</a></div>';
             })
             ->addColumn('fields', function ($data) {
                 $fields = DB::table('applicant_fields')->where('applicant_id', '=', $data->id)->get();
