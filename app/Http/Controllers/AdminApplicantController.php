@@ -53,7 +53,7 @@ class AdminApplicantController extends Controller
                 });
             }
         }
-        // $data = $data->groupBy('af.applicant_id');
+        $data = $data->groupBy('ad.id');
 
         return datatables($data->get())
             ->setRowId(function ($data) {
