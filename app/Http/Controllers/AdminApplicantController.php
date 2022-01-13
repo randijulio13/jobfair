@@ -34,23 +34,26 @@ class AdminApplicantController extends Controller
 
     function datatables()
     {
-        $sponsor_id = DB::table('users as u')->join('sponsors as s', 's.user_id', '=', 'u.id')->where('u.id', '=', session('userdata')['id'])->value('s.id');
+        $sponsor = DB::table('users as u')->select('u.*', 's.id as sponsor_id', 's.type as sponsor_type')->join('sponsors as s', 's.user_id', '=', 'u.id')->where('u.id', '=', session('userdata')['id'])->first();
+        $sponsor_id = $sponsor->sponsor_id;
         $data = DB::table('applicant_fields as af')
             ->select('ad.*', 'u.phone', 'u.email')
             ->join('applicant_datas as ad', 'ad.id', '=', 'af.applicant_id')
             ->join('users as u', 'u.id', '=', 'ad.user_id')
             ->where('u.status', '=', 1);
         if (session('userdata')['type'] != 1) {
+            $data = $data->where('ad.file', '!=', null);
             $fields = DB::table('sponsor_fields as sf')
                 ->where('sf.sponsor_id', '=', $sponsor_id)
                 ->get();
 
-            $data = $data->where('ad.file', '!=', null)
-                ->where(function ($q) use ($fields) {
+            if ($sponsor->sponsor_type == 2) {
+                $data = $data->where(function ($q) use ($fields) {
                     foreach ($fields as $f) {
                         $q->orWhere('field_id', '=', $f->field_id);
                     }
                 });
+            }
         }
         $data = $data->groupBy('af.applicant_id');
 
