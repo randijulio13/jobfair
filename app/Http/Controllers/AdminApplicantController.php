@@ -33,7 +33,7 @@ class AdminApplicantController extends Controller
     function datatables()
     {
         $data = DB::table('applicant_fields as af')
-            ->select('ad.*', 'u.phone', 'u.email')
+            ->select('ad.id','ad.user_id','ad.name','ad.gender','ad.pob','ad.bop','ad.last_edu','ad.major','ad.grad_year','ad.file', 'u.phone', 'u.email')
             ->join('applicant_datas as ad', 'ad.id', '=', 'af.applicant_id')
             ->join('users as u', 'u.id', '=', 'ad.user_id')
             ->where('u.status', '=', 1);
@@ -53,7 +53,7 @@ class AdminApplicantController extends Controller
                 });
             }
         }
-        $data = $data->groupBy('ad.id','ad.user_id','u.phone','u.email');
+        $data = $data->groupBy('ad.id','ad.user_id','ad.name','ad.gender','ad.pob','ad.bop','ad.last_edu','ad.major','ad.grad_year','ad.file','u.phone','u.email');
 
         return datatables($data->get())
             ->setRowId(function ($data) {
