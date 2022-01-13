@@ -11,7 +11,6 @@ class AdminApplicantController extends Controller
 {
     function index()
     {
-        $career_fields = DB::table('career_fields')->get();
         $sponsor = DB::table('sponsors')->where('user_id', '=', session('userdata')['id'])->first();
         if (session('userdata')['type'] == 2) {
             $sponsor_fields = DB::table('sponsor_fields')->where('sponsor_id', '=', $sponsor->id)->get();
@@ -25,8 +24,7 @@ class AdminApplicantController extends Controller
             if (count($selected) == $field_total)
                 return view('admin/applicant');
 
-
-
+            $career_fields = DB::table('career_fields')->get();
             return view('admin/select_field', compact('career_fields', 'sponsor_fields', 'field_total'));
         }
         return view('admin/applicant');
@@ -55,7 +53,7 @@ class AdminApplicantController extends Controller
                 });
             }
         }
-        $data = $data->groupBy('af.applicant_id');
+        // $data = $data->groupBy('af.applicant_id');
 
         return datatables($data->get())
             ->setRowId(function ($data) {
