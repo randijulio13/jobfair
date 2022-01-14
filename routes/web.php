@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminMessageController;
 use App\Http\Controllers\AdminPaymentController;
+use App\Http\Controllers\AdminProfilSponsorController;
 use App\Http\Controllers\AdminSponsorController;
 use App\Http\Controllers\AdminTokenController;
 use App\Http\Controllers\AdminUserController;
@@ -67,7 +68,7 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
 
     Route::prefix('config')->middleware('auth.role:1')->group(function () {
         Route::get('', [AdminConfigController::class, 'index'])->name('admin.config');
-        Route::patch('',[AdminConfigController::class,'update']);
+        Route::patch('', [AdminConfigController::class, 'update']);
     });
 
     Route::prefix('message')->group(function () {
@@ -75,12 +76,17 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
         Route::get('datatables', [AdminMessageController::class, 'datatables']);
         Route::get('{id}', [AdminMessageController::class, 'detail'])->name('admin.message_detail');
         Route::post('', [AdminMessageController::class, 'store']);
-        Route::delete('{id}',[AdminMessageController::class,'delete']);
+        Route::delete('{id}', [AdminMessageController::class, 'delete']);
+    });
+
+    Route::prefix('profile')->group(function () {
+        Route::get('', [AdminProfilSponsorController::class, 'index'])->name('profile.sponsor');
+        Route::post('',[AdminProfilSponsorController::class,'update']);
     });
 
     Route::prefix('applicant')->group(function () {
         Route::get('', [AdminApplicantController::class, 'index'])->name('applicant');
-        Route::post('sponsor',[AdminApplicantController::class,'sponsor']);
+        Route::post('sponsor', [AdminApplicantController::class, 'sponsor']);
         Route::get('datatables', [AdminApplicantController::class, 'datatables']);
     });
 
@@ -99,7 +105,7 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
         Route::get('{id}', [AdminVacancyController::class, 'detail'])->name('admin.detail.vacancy');
         Route::post('', [AdminVacancyController::class, 'store']);
         Route::post('set_seen', [AdminVacancyController::class, 'set_seen']);
-        Route::patch('{id}', [AdminVacancyController::class, 'update']);
+        Route::post('{id}', [AdminVacancyController::class, 'update']);
         Route::patch('status/{id}', [AdminVacancyController::class, 'update_status']);
     });
 

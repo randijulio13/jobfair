@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -68,7 +69,9 @@ class AdminVacancyController extends Controller
 
     function datatables()
     {
-        $vacancies = DB::table('vacancies')->select('vacancies.*', 'cf.name as career_field')->join('career_fields as cf', 'cf.id', '=', 'vacancies.career_field');
+        $vacancies = DB::table('vacancies')
+            ->select('vacancies.*', 'cf.name as career_field')
+            ->join('career_fields as cf', 'cf.id', '=', 'vacancies.career_field');
         $sponsor_id = DB::table('sponsors')->where('user_id', '=', session('userdata')['id'])->value('id');
         if (session('userdata')['type'] == 2) {
             $vacancies = $vacancies->where('sponsor_id', '=', $sponsor_id);
@@ -79,10 +82,22 @@ class AdminVacancyController extends Controller
                 $sponsor = DB::table('sponsors')->where('id', '=', $data->sponsor_id)->first();
                 return '<img src="/assets/img/' . $sponsor->logo . '" width="150px">';
             })
+            ->addColumn('image', function ($data) {
+                return '<img src="/assets/img/' . $data->image . '" width="150px">';
+            })
             ->addColumn('aksi', function ($data) {
                 return '<div class="btn-group">
                 <a href="/admin/vacancy/' . $data->id . '" class="btn btn-primary btn-sm btn-detail"><i class="fas fa-eye"></i> Detail</a>
                 </div>';
+            })
+            ->addColumn('title', function ($data) {
+                $total = DB::table('vacancy_applicants')->where('vacancy_id', '=', $data->id)->count();
+                return $data->title . '<br><small>
+                <ul>
+                <li>Bidang: ' . $data->career_field . '</li>
+                <li>Pelamar: ' . $total . '</li>
+                </ul>
+                </small>';
             })
             ->addColumn('status', function ($data) {
                 $checked = $data->status ? 'checked'  : '';
@@ -91,14 +106,10 @@ class AdminVacancyController extends Controller
                 <label class="custom-control-label" for="status' . $data->id . '"></label>
               </div>';
             })
-            ->addColumn('applicant', function ($data) {
-                $total = DB::table('vacancy_applicants')->where('vacancy_id', '=', $data->id)->count();
-                return $total;
-            })
             ->setRowId(function ($data) {
                 return $data->id;
             })
-            ->rawColumns(['sponsor_image', 'aksi', 'status'])
+            ->rawColumns(['sponsor_image', 'aksi', 'status', 'title', 'image'])
             ->toJson();
     }
 
@@ -133,17 +144,31 @@ class AdminVacancyController extends Controller
         );
         try {
             DB::beginTransaction();
+            $vacancies = DB::table('vacancies')->where('id', '=', $id)->first();
             $data = [
                 'title' => request('title'),
                 'description'   => request('description'),
                 'career_field'  => request('career_field'),
             ];
+            if (request()->has('image')) {
+                $image = $request->image;
+                $namaFileBaru = date('Ymd') . rand(0, 9999) . Str::slug(request('title'), '-') . '.' . request('image')->getClientOriginalExtension();
+                $data['image']  = $namaFileBaru;
+            }
             DB::table('vacancies')->where('id', '=', $id)->update($data);
-            DB::commit();
+            if (request()->has('image')) {
+                $image->move('assets/img/', $namaFileBaru);
+                if ($vacancies->image) {
+                    if (file_exists('assets/img/' . $vacancies->image)) {
+                        unlink('assets/img/' . $vacancies->image);
+                    };
+                }
+            }
             $res = [
                 'status'    => 201,
                 'message'   => 'Lowongan berhasil diupdate'
             ];
+            DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
             $res = [
@@ -160,18 +185,22 @@ class AdminVacancyController extends Controller
             [
                 'title' => ['required'],
                 'description'   => ['required'],
-                'career_field'  => ['required']
+                'career_field'  => ['required'],
+                'image'         => ['required']
             ],
             ['required' => ':attribute harus diisi'],
             [
                 'title' => 'Judul',
                 'description'   => 'Deskripsi',
-                'career_field'  => 'Bidang pekerjaan'
+                'career_field'  => 'Bidang pekerjaan',
+                'image'         => 'Poster'
             ]
         );
 
         try {
             DB::beginTransaction();
+            $image = $request->image;
+            $namaFileBaru = date('Ymd') . rand(0, 9999) . Str::slug(request('title'), '-') . '.' . request('image')->getClientOriginalExtension();
             $sponsor_id = DB::table('sponsors')->where('user_id', '=', session('userdata')['id'])->value('id');
             $data = [
                 'title' => request('title'),
@@ -179,7 +208,10 @@ class AdminVacancyController extends Controller
                 'career_field'  => request('career_field'),
                 'sponsor_id'    => $sponsor_id
             ];
+            if ($image)
+                $data['image']  = $namaFileBaru;
             DB::table('vacancies')->insert($data);
+            $image->move('assets/img/', $namaFileBaru);
             DB::commit();
             $res = [
                 'status'    => 201,

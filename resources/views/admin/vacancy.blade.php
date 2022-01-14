@@ -17,9 +17,8 @@
                             <tr>
                                 <th>#</th>
                                 <th>Perusahaan</th>
-                                <th>Judul</th>
-                                <th>Bidang</th>
-                                <th>Pelamar</th>
+                                <th>Poster</th>
+                                <th>Loker</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -37,37 +36,40 @@
 <div class="modal fade" id="modalVacancy" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
-                <div class="modal-header">
-                        <h5 class="modal-title">Data Lowongan</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                    </div>
+            <div class="modal-header">
+                <h5 class="modal-title">Data Lowongan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="modal-body">
                 <form id="formVacancy">
-                <div class="container-fluid">
-                    <div class="form-group">
-                        <label for="title">Judul</label>
-                        <input type="text" class="form-control" name="title" id="title">
-                        <div class="invalid-feedback"></div>
+                    <div class="container-fluid">
+                        <div class="form-group">
+                            <label for="title">Judul</label>
+                            <input type="text" class="form-control" name="title" id="title">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Deskripsi</label>
+                            <textarea name="description" id="description" cols="30" rows="3 " class="form-control"></textarea>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="career_field">Bidang Pekerjaan</label>
+                            <select name="career_field" id="career_field" class="form-control">
+                                <option value="" selected disabled>-- Pilih Bidang Pekerjaan --</option>
+                                @foreach($career_fields as $cf)
+                                <option value="{{ $cf->id }}">{{ $cf->name }}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Poster</label>
+                            <input type="file" class="form-control" name="image" id="image">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="description">Deskripsi</label>
-                        <textarea name="description" id="description" cols="30" rows="3 " class="form-control"></textarea>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="career_field">Bidang Pekerjaan</label>
-                        <select name="career_field" id="career_field" class="form-control">
-                            <option value="" selected disabled>-- Pilih Bidang Pekerjaan --</option>
-                            @foreach($career_fields as $cf)
-                            <option value="{{ $cf->id }}">{{ $cf->name }}</option>
-                            @endforeach
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                    
-                </div>
                 </form>
             </div>
             <div class="modal-footer">

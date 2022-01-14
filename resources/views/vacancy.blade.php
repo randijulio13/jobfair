@@ -9,13 +9,23 @@
             <div class="col-lg-8 entries">
                 <div class="row">
                     @foreach($vacancies as $vacan)
-                    <div class="col-lg-12">
+                    <div class="col-lg-4 d-flex align-items-stretch">
+                        <div class="card" style="width: 18rem;">
+                            <a href="/loker/detail/{{ $vacan->id }}">
+                                <img src="/assets/img/{{ $vacan->logo }}" class="card-img-top" alt="{{ $vacan->title }}">
+                            </a>
+                            <div class="card-body">
+                                <p class="card-text text-center">{{ $vacan->title }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-lg-12">
                         <article class="entry">
                             <h2 class="entry-title"><a href="/loker/detail/{{ $vacan->id }}">{{ $vacan->title }}</a></h2>
                             <div class="entry-content">
                                 <div class="row">
                                     <div class="col-lg-4">
-                                        <img src="/assets/img/{{ $vacan->logo }}" alt="" class="img-fluid">
+                                        <img src="/assets/img/{{ $vacan->image }}" alt="" class="img-fluid">
                                     </div>
                                     <div class="col-lg-8">
                                         <div class="entry-meta">
@@ -31,8 +41,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </article><!-- End blog entry -->
-                    </div>
+                        </article>
+                    </div> -->
                     @endforeach
                     <div class="col-lg-12">
                         {{ $vacancies->links() }}

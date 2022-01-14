@@ -10,9 +10,6 @@
                 <div class="row">
                     <input type="hidden" id="vacancy_id" value="{{ $vacancy->id }}">
                     <article class="entry entry-single">
-                        <div class="entry-img">
-                            <img src="/assets/img/{{ $vacancy->logo }}" alt="" class="p-5 img-fluid">
-                        </div>
                         <h2 class="entry-title">
                             <a href="#">{{ $vacancy->title }}</a>
                         </h2>
@@ -24,12 +21,13 @@
                             </ul>
                         </div>
                         <div class="entry-content">
-                            <p>{!! $vacancy->description !!}</p>
-                                @if($isSent)
-                                <a href="#" class="btn btn-success text-white disabled" id="btnDaftar"><i class="bi bi-send-check-fill"></i> CV Berhasil Dikirim</a>
-                                @else
-                                <a href="#" class="btn btn-warning text-white" id="btnDaftar"><i class="bi bi-send-fill"></i> Kirim CV</a>
-                                @endif
+                                    <img src="/assets/img/{{ $vacancy->image }}" alt="" class="img-fluid">
+                                    <p>{!! $vacancy->description !!}</p>
+                                    @if($isSent)
+                                    <a href="#" class="btn btn-primary text-white disabled" id="btnDaftar"><i class="bi bi-send-check-fill"></i> CV Terkirim</a>
+                                    @else
+                                    <a href="#" class="btn btn-primary text-white" id="btnDaftar"><i class="bi bi-send-fill"></i> Kirim CV</a>
+                                    @endif
                         </div>
                     </article>
                 </div>

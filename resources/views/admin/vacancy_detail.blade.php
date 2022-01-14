@@ -5,36 +5,44 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card my-2">
-            <div class="card-header">
-                Data Lowongan Pekerjaan
-            </div>
             <div class="card-body">
-                <form id="formVacancy">
-                    <input type="hidden" name="id" id="id" value="{{ $vacancy->id }}">
-                    <div class="form-group">
-                        <label for="title">Judul</label>
-                        <input type="text" class="form-control" name="title" id="title" value="{{ $vacancy->title }}">
-                        <div class="invalid-feedback"></div>
+                <div class="row">
+                    <div class="col-lg-4 d-flex align-self-center justify-content-center">
+                        <img src="/assets/img/{{ $vacancy->image }}" alt="{{ $vacancy->image }}" class="img-fluid">
                     </div>
-                    <div class="form-group">
-                        <label for="description">Deskripsi</label>
-                        <textarea name="description" id="description" cols="30" rows="3 " class="form-control">{{ $vacancy->description }}</textarea>
-                        <div class="invalid-feedback"></div>
+                    <div class="col-lg-8">
+                        <form id="formVacancy">
+                            <input type="hidden" name="id" id="id" value="{{ $vacancy->id }}">
+                            <div class="form-group">
+                                <label for="title">Judul</label>
+                                <input type="text" class="form-control" name="title" id="title" value="{{ $vacancy->title }}">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Deskripsi</label>
+                                <textarea name="description" id="description" cols="30" rows="3 " class="form-control">{{ $vacancy->description }}</textarea>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="career_field">Bidang Pekerjaan</label>
+                                <select name="career_field" id="career_field" class="form-control">
+                                    <option value="" selected disabled>-- Pilih Bidang Pekerjaan --</option>
+                                    @foreach($career_fields as $cf)
+                                    <?php
+                                    $selected = $cf->id == $vacancy->career_field ? 'selected' : '';
+                                    ?>
+                                    <option value="{{ $cf->id }}" {{ $selected }}>{{ $cf->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Poster</label>
+                                <input type="file" name="image" id="image" class="form-control">
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="career_field">Bidang Pekerjaan</label>
-                        <select name="career_field" id="career_field" class="form-control">
-                            <option value="" selected disabled>-- Pilih Bidang Pekerjaan --</option>
-                            @foreach($career_fields as $cf)
-                            <?php
-                            $selected = $cf->id == $vacancy->career_field ? 'selected' : '';
-                            ?>
-                            <option value="{{ $cf->id }}" {{ $selected }}>{{ $cf->name }}</option>
-                            @endforeach
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </form>
+                </div>
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary" form="formVacancy" id="btnSubmit">Simpan</button>

@@ -21,9 +21,13 @@ $(function () {
                 orderable: false,
                 width: "1%",
             },
+            {
+                data: "image",
+                class: "text-center",
+                orderable: false,
+                width: "1%",
+            },
             { data: "title" },
-            { data: "career_field" },
-            { data: "applicant",class:'text-center' },
             { data: "status", class: "text-center", orderable: false },
             { data: "aksi", orderable: false, class: "text-center" },
         ],
@@ -38,16 +42,27 @@ $(function () {
         $(".is-invalid").removeClass("is-invalid");
     });
 
-    $('#description').summernote({
-        height:'100'
-    })
+    $("#description").summernote({
+        height: "100",
+    });
 
     $("#formVacancy").on("submit", function (e) {
         e.preventDefault();
-        let data = $(this).serialize();
-        $.post("/admin/vacancy", data)
+
+        let data = new FormData(this);
+        mySwalLoading();
+        $.ajax({
+            type: "post",
+            url: "/admin/vacancy",
+            data: data,
+            enctype: "multipart/form-data",
+            processData: false,
+            contentType: false,
+            cache: false,
+            dataType: "json",
+        })
             .then((res) => {
-                Swal.fire({
+                mySwal.fire({
                     icon: "success",
                     title: "Berhasil",
                     text: res.message,
@@ -58,7 +73,6 @@ $(function () {
                 $("#modalVacancy").modal("hide");
             })
             .catch((err) => {
-                console.log(err);
                 if (err.status == 422) {
                     errorValidasi(err);
                 } else {

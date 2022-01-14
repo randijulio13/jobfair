@@ -35,27 +35,33 @@ $(function () {
         });
     });
 
-    $('#description').summernote({
-        height:'100'
-    })
+    $("#description").summernote({
+        height: "100",
+    });
 
     $("#formVacancy").on("submit", function (e) {
         e.preventDefault();
-        let data = $(this).serialize();
+        let data = new FormData(this);
+        mySwalLoading();
         $.ajax({
+            type: "post",
             url: "/admin/vacancy/" + id,
-            type: "patch",
+            data: data,
+            enctype: "multipart/form-data",
+            processData: false,
+            contentType: false,
+            cache: false,
             dataType: "json",
-            data,
         })
-            .then((res) => {
-                Swal.fire({
+            .then(async (res) => {
+                await Swal.fire({
                     icon: "success",
                     title: "Berhasil",
                     text: res.message,
                     timer: 1500,
                     showConfirmButton: false,
                 });
+                window.location.reload();
             })
             .catch((err) => {
                 console.log(err);

@@ -72,6 +72,13 @@
             <span>Konfigurasi</span>
         </a>
     </li>
+    @else
+    <li class="nav-item {{ Request::routeIs('profile.sponsor')   ? 'active' : '' }}">
+        <a class="nav-link" href="/admin/profile">
+            <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+            <span>Profil Sponsor</span>
+        </a>
+    </li>
     @endif
     <hr class="sidebar-divider d-none d-md-block">
     <div class="text-center d-none d-md-inline">

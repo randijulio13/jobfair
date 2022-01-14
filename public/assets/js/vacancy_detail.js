@@ -19,8 +19,8 @@ $(function () {
 
             if (password) {
                 $.post("/loker", { password, vacancy_id })
-                    .then((res) => {
-                        Swal.fire({
+                    .then(async (res) => {
+                        await Swal.fire({
                             icon: "success",
                             title: "Berhasil",
                             text: res.message,
@@ -28,6 +28,7 @@ $(function () {
                             showConfirmButton: false,
                             timerProgressBar: true,
                         });
+                        window.location.reload();
                     })
                     .catch((err) => {
                         Swal.fire({
