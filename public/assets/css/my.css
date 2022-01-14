@@ -1,0 +1,87 @@
+.blog .sidebar {
+    padding: 30px;
+    margin: 0 0 20px 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.blog .sidebar .sidebar-item {
+    margin-bottom: 0px;
+}
+
+.card {
+    border: 0px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05);
+}
+
+.about {
+    padding-top: 160px;
+}
+
+#hero {
+    background: url("../img/template/why-us.jpg") top center;
+    background-size: cover;
+}
+
+.section-title {
+    text-align: left;
+}
+
+@media only screen and (max-width: 600px) {
+    .section-title {
+        text-align: center;
+    }
+}
+
+.about-img {
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.cta {
+    background: linear-gradient(rgba(5, 74, 133, 0.8), rgba(5, 74, 133, 0.9)),
+        url("../img/template/graha.jpg") fixed center top;
+    background-size: cover;
+    padding: 120px 0;
+}
+
+#formToken input {
+    border-radius: 100px;
+}
+
+#btnFormToken {
+    border-radius: 100px;
+    border: 0;
+    color: white;
+}
+
+#btnFormToken:hover {
+    background: #0880e8;
+}
+
+.wa-float {
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    left: 15px;
+    bottom: 15px;
+    z-index: 996;
+    background: #17e239;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    transition: all 0.4s;
+}
+.wa-float i {
+    font-size: 28px;
+    color: #fff;
+    line-height: 0;
+}
+.wa-float:hover {
+    background: rgb(29, 202, 95);
+    color: #fff;
+}
+.wa-float.active {
+    visibility: visible;
+    opacity: 1;
+}
