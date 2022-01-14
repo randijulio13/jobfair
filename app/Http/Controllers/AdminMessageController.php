@@ -47,7 +47,7 @@ class AdminMessageController extends Controller
                 return '<b>' . $data->subject . '</b>';
             })
             ->addColumn('aksi', function ($data) {
-                return '<a href="/admin/message/' . $data->id . '" class="btn btn-primary btn-sm btnDetail"> Detail</a>';
+                return '<a href="/admin/message/' . $data->id . '" class="btn btn-primary btn-sm btnDetail"> Detail</a>&nbsp;<a class="btn btn-danger btn-sm btn-hapus"> Delete</a>';
             })
             ->addColumn('seen', function ($data) {
                 $seen = DB::table('new_messages')->where('message_id', '=', $data->id)->where('user_id', '=', session('userdata')['id'])->count();
@@ -118,5 +118,25 @@ class AdminMessageController extends Controller
         if ($message->receiver_id == $id)
             return true;
         return false;
+    }
+
+    function delete($id)
+    {
+        try {
+            DB::beginTransaction();
+            DB::table('messages')->where('id', '=', $id)->delete();
+            DB::table('new_messages')->where('message_id','=',$id)->delete();
+            DB::commit();
+            return response()->json([
+                'status'    => 200,
+                'message'   => 'OK'
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status'    => $e->getCode() ?? 400,
+                'message'   => $e->getMessage() ?? 'Error'
+            ]);
+        }
     }
 }

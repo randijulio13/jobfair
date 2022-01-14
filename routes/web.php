@@ -75,6 +75,7 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
         Route::get('datatables', [AdminMessageController::class, 'datatables']);
         Route::get('{id}', [AdminMessageController::class, 'detail'])->name('admin.message_detail');
         Route::post('', [AdminMessageController::class, 'store']);
+        Route::delete('{id}',[AdminMessageController::class,'delete']);
     });
 
     Route::prefix('applicant')->group(function () {

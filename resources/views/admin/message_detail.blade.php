@@ -32,10 +32,6 @@
                 @endif
 
             </div>
-            <hr>
-            <div>
-                <a href="#" class="btn btn-primary btnReply py-2 px-4"><i class="fa fa-reply"></i> Balas</a>
-            </div>
         </div>
     </div>
 </div>

@@ -27,16 +27,16 @@ $(function () {
     $("#formReject").on("submit", async function (e) {
         e.preventDefault();
         let data = $(this).serialize();
-        let id = $('#user_id').val()
+        let id = $("#user_id").val();
         await $.post("/admin/message", data);
         await $.ajax({
-            url:`/admin/user/${id}`,
-            dataType:'json',
-            type:'patch',
-            data:{
-                status:3
+            url: `/admin/user/${id}`,
+            dataType: "json",
+            type: "patch",
+            data: {
+                status: 3,
             },
-        })
+        });
         Swal.fire({
             title: "Berhasil",
             icon: "success",
@@ -45,7 +45,7 @@ $(function () {
             showConfirmButton: false,
             timerProgressBar: true,
         });
-        $('#message').html('')
+        $("#message").html("");
         $("#modalReject").modal("hide");
     });
 
@@ -87,5 +87,45 @@ $(function () {
                 window.location.href = "/admin/message";
             });
         }
+    });
+
+    $(document).on("click", ".btn-hapus", function (e) {
+        e.preventDefault();
+        selectedId = $(this).parents("tr").attr("id");
+        Swal.fire({
+            title: "Hapus Pesan",
+            text: "Pesan akan dihapus! anda yakin?",
+            icon: "warning",
+            confirmButtonColor: "#3085d6",
+            showCancelButton: true,
+            confirmButtonText: "Ya, logout",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "delete",
+                    url: "/admin/message/" + selectedId,
+                    dataType: "json",
+                })
+                    .then((res) => {
+                        Swal.fire({
+                            title: "Berhasil",
+                            icon: "success",
+                            text: "Pesan berhasil dihapus",
+                            timer: 1500,
+                            showConfirmButton: false,
+                        });
+                        table.ajax.reload()
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            title: "Error",
+                            icon: "error",
+                            text: "Gagal menghapus pesan",
+                            timer: 1500,
+                            showConfirmButton: false,
+                        });
+                    });
+            }
+        });
     });
 });
