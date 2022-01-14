@@ -43,6 +43,10 @@ class AdminLoginController extends Controller
             if (!Hash::check(request('password'), $user->password))
                 throw new Exception('Password salah!', 401);
 
+            if ($user->status == 0)
+                throw new Exception('Akun anda dinonaktifkan', 401);
+
+
             $data = [
                 'id'    => $user->id,
                 'username'   => $user->username,
