@@ -20,6 +20,7 @@
                             <ul>
                                 <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="/loker?sponsor={{$vacancy->nama_sponsor}}">{{ $vacancy->nama_sponsor }}</a></li>
                                 <li class="d-flex align-items-center"><i class="bi bi-briefcase"></i> <a href="/loker?field={{$vacancy->career_field}}">{{ $vacancy->career_field }}</a></li>
+                                <li class="d-flex align-items-center"><i class="bi bi-calendar"></i> <a href="#">{{ \Carbon\Carbon::parse($vacancy->created_at)->format('d M Y') }}</a></li>
                             </ul>
                         </div>
                         <div class="entry-content">

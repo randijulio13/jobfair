@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,7 +12,6 @@ class VacancyController extends Controller
 {
     function index()
     {
-
         $vacancies = DB::table('vacancies')
             ->select('vacancies.*', 'cf.name as career_field', 's.name as nama_sponsor', 's.logo');
         if (request()->has('field'))

@@ -47,19 +47,20 @@ $categories = DB::table('career_fields')->select(
                                 ( {{ $new }} )
                                 @endif
                             </a></li>
+                        <hr>
                         <li><a href="/profile">{!! Request::routeIs('profile') ? '<i class="bi bi-caret-right-fill"></i>' : '' !!} Data Diri</a></li>
                         <li><a href="/profile/account">{!! Request::routeIs('account') ? '<i class="bi bi-caret-right-fill"></i>' : '' !!} Data Akun</a></li>
                         @else
+                        <hr>
                         <li><a href="/login">{!! Request::routeIs('login') ? '<i class="bi bi-caret-right-fill"></i>' : '' !!} Login</a></li>
                         @endif
-                    </ul>
-                    @if(session('userdata_applicant'))
-                    <ul class="mt-4">
+                        @if(session('userdata_applicant'))
+                        <hr>
                         <li>
                             <a href="/logout" class="userLogout"><i class="bi bi-door-open-fill"></i> Logout</a>
                         </li>
+                        @endif
                     </ul>
-                    @endif
                 </div>
             </div>
         </div>
