@@ -5,6 +5,7 @@ $(function () {
         e.preventDefault();
         $(".is-invalid").removeClass("is-invalid");
         let data = new FormData(this);
+        mySwalLoading()
         $.ajax({
             type: "post",
             url: "/profile",
@@ -49,6 +50,7 @@ $(function () {
     $("#formPembayaran").on("submit", function (e) {
         e.preventDefault();
         let data = new FormData(this);
+        mySwalLoading();
         $.ajax({
             type: "post",
             url: "/profile/payment",

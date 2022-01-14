@@ -128,6 +128,7 @@ $(function () {
                 ? "/admin/payment"
                 : `/admin/payment/${selectedId}`;
         try {
+            mySwalLoading()
             let res = await $.ajax({
                 type: "post",
                 url: url,

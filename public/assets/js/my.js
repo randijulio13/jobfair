@@ -105,3 +105,14 @@ const mySwal = Swal.mixin({
     },
     buttonsStyling: false,
 });
+
+function mySwalLoading(title = "Loading", text = "Harap tunggu...") {
+    return Swal.fire({
+        title: title,
+        html:
+            '<div class="spinner-border text-dark mb-1" role="status"><span class="sr-only">Loading...</span> </div><br> ' +
+            text,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
+}

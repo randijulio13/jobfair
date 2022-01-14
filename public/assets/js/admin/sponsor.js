@@ -64,6 +64,7 @@ $(function () {
         let data = new FormData(this);
         $(".is-invalid").removeClass("is-invalid");
         if (formType == "submit") {
+            mySwalLoading()
             $.ajax({
                 type: "post",
                 url: "/admin/sponsor",
@@ -99,6 +100,7 @@ $(function () {
                     }
                 });
         } else {
+            mySwalLoading()
             $.ajax({
                 type: "post",
                 url: "/admin/sponsor/" + selectedId,
