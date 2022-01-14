@@ -124,8 +124,14 @@ class AdminMessageController extends Controller
     {
         try {
             DB::beginTransaction();
+            $attachment = DB::table('messages')->where('id', '=', $id)->value('attachment');
             DB::table('messages')->where('id', '=', $id)->delete();
-            DB::table('new_messages')->where('message_id','=',$id)->delete();
+            DB::table('new_messages')->where('message_id', '=', $id)->delete();
+            if ($attachment) {
+                if (file_exists('assets/img/payment/' . $attachment)) {
+                    unlink('assets/img/payment/' . $attachment);
+                };
+            }
             DB::commit();
             return response()->json([
                 'status'    => 200,
