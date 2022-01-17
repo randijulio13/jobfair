@@ -29,7 +29,7 @@ class VacancyController extends Controller
             ->where('s.status', '=', 1)
             ->join('career_fields as cf', 'cf.id', '=', 'vacancies.career_field')
             ->join('sponsors as s', 's.id', '=', 'vacancies.sponsor_id')
-            ->paginate(6);
+            ->paginate(9);
         // return $vacancies;
         return view('vacancy', compact('vacancies'));
     }
