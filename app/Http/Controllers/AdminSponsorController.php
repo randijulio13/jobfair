@@ -50,7 +50,7 @@ class AdminSponsorController extends Controller
         $request->validate([
             'name'  => ['required'],
             'type'  => ['required'],
-            'description'   => ['required'],
+            // 'description'   => ['required'],
             'logo'  => ['required'],
             'username'  => ['required'],
         ]);

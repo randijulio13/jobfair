@@ -67,6 +67,7 @@ $(function () {
                 console.log(err);
                 if (err.status == 422) {
                     errorValidasi(err);
+                    Swal.close()
                 } else {
                     mySwal.fire({
                         title: "Error",

@@ -43,7 +43,7 @@ class VacancyController extends Controller
             $isSent = 0;
         }
         $vacancy = DB::table('vacancies')->where('vacancies.id', '=', $id)
-            ->select('vacancies.*', 'cf.name as career_field', 's.name as nama_sponsor', 's.logo')
+            ->select('vacancies.*', 'cf.name as career_field', 's.name as nama_sponsor', 's.logo','s.description as sponsor_description')
             ->join('career_fields as cf', 'cf.id', '=', 'vacancies.career_field')
             ->join('sponsors as s', 's.id', '=', 'vacancies.sponsor_id')
             ->first();

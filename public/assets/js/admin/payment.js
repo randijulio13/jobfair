@@ -29,15 +29,15 @@ $(function () {
             data: {
                 status,
             },
-        }).catch((err)=>{
-            table.ajax.reload()
+        }).catch((err) => {
+            table.ajax.reload();
             Swal.fire({
-                icon:'error',
-                title:'Error',
-                message:err.responseJSON.message,
-                timer:1500,
-                showConfirmButton:false
-            })
+                icon: "error",
+                title: "Error",
+                message: err.responseJSON.message,
+                timer: 1500,
+                showConfirmButton: false,
+            });
         });
     });
 
@@ -128,7 +128,7 @@ $(function () {
                 ? "/admin/payment"
                 : `/admin/payment/${selectedId}`;
         try {
-            mySwalLoading()
+            mySwalLoading();
             let res = await $.ajax({
                 type: "post",
                 url: url,
@@ -150,15 +150,19 @@ $(function () {
             table.ajax.reload();
             $("#modalPayment").modal("hide");
         } catch (err) {
-            if (err.status == 422) errorValidasi(err);
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: err.responseJSON.message,
-                showConfirmButton: false,
-                timer: 5000,
-                timerProgressBar: true,
-            });
+            if (err.status == 422) {
+                errorValidasi(err);
+                Swal.close();
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: err.responseJSON.message,
+                    showConfirmButton: false,
+                    timer: 5000,
+                    timerProgressBar: true,
+                });
+            }
         }
     });
 

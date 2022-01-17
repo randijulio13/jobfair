@@ -29,6 +29,7 @@ $(function () {
             })
             .catch((err) => {
                 if (err.status == 422) {
+                    Swal.close()
                     errorValidasi(err);
                 } else {
                     mySwal.fire({
@@ -70,6 +71,14 @@ $(function () {
                 timerProgressBar: true,
             });
             window.location.reload();
+        }).catch((err)=>{
+            mySwal.fire({
+                title: "Error",
+                icon: "error",
+                text: err.responseJSON.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
         });
     });
 

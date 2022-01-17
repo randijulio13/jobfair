@@ -183,7 +183,7 @@ class AdminVacancyController extends Controller
     {
         $rules = [
             'title' => ['required'],
-            'description'   => ['required'],
+            // 'description'   => ['required'],
             'career_field'  => ['required'],
             'image'         => ['required']
         ];

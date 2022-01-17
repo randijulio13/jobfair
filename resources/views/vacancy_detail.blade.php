@@ -21,13 +21,18 @@
                             </ul>
                         </div>
                         <div class="entry-content">
-                                    <img src="/assets/img/{{ $vacancy->image }}" alt="" class="img-fluid">
-                                    <p>{!! $vacancy->description !!}</p>
-                                    @if($isSent)
-                                    <a href="#" class="btn btn-primary text-white disabled" id="btnDaftar"><i class="bi bi-send-check-fill"></i> CV Terkirim</a>
-                                    @else
-                                    <a href="#" class="btn btn-primary text-white" id="btnDaftar"><i class="bi bi-send-fill"></i> Kirim CV</a>
-                                    @endif
+                            <img src="/assets/img/{{ $vacancy->image }}" alt="" class="img-fluid mb-3">
+                            @if($vacancy->sponsor_description)
+                            <div class="alert">
+                                <p>{{ $vacancy->sponsor_description }}</p>
+                            </div>
+                            @endif
+                            <p>{!! $vacancy->description !!}</p>
+                            @if($isSent)
+                            <a href="#" class="btn btn-primary text-white disabled" id="btnDaftar"><i class="bi bi-send-check-fill"></i> CV Terkirim</a>
+                            @else
+                            <a href="#" class="btn btn-primary text-white" id="btnDaftar"><i class="bi bi-send-fill"></i> Kirim CV</a>
+                            @endif
                         </div>
                     </article>
                 </div>

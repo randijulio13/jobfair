@@ -99,6 +99,7 @@ $(function () {
             })
             .catch((err) => {
                 if (err.status == 422) {
+                    Swal.close();
                     errorValidasi(err);
                 } else {
                     mySwal.fire({

@@ -88,6 +88,7 @@ $(function () {
                 })
                 .catch((err) => {
                     if (err.status == 422) {
+                        Swal.close()
                         errorValidasi(err);
                     } else {
                         mySwal.fire({
@@ -125,6 +126,7 @@ $(function () {
                 .catch((err) => {
                     if (err.status == 422) {
                         errorValidasi(err);
+                        Swal.close()
                     } else {
                         mySwal.fire({
                             title: "Error",
