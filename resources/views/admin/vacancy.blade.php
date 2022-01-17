@@ -46,8 +46,8 @@
                         @if(session('userdata')['type'] == 1)
                         <div class="form-group">
                             <label for="sponsor_id">Sponsor</label>
-                            <input type="select" class="form-control" name="sponsor_id" id="sponsor_id">
-                            <div class="invalid-feedback"></div>
+                            <select type="select" class="form-control" name="sponsor_id" id="sponsor_id"><select>
+                                    <div class="invalid-feedback"></div>
                         </div>
                         @endif
                         <div class="form-group">
