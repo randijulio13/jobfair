@@ -9,8 +9,8 @@
             <div class="col-lg-8 entries">
                 <div class="row">
                     @foreach($vacancies as $vacan)
-                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-                        <div class="card mb-4" style="width: 18rem;">
+                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch">
+                        <div class="card mb-4">
                             <div class="card-body">
                                 <p class="card-text text-center">
                                     <a href="/loker/detail/{{ $vacan->id }}" class="stretched-link text-black">
