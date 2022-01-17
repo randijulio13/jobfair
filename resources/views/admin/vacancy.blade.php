@@ -5,11 +5,9 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            @if(session('userdata')['type'] == 2)
             <div class="card-header">
-                <a href="#" class="btn btn-primary" id="btnAdd">Buat Lowongan</a>
+                <a href="#" class="btn btn-primary" id="btnAdd">Buat Loker</a>
             </div>
-            @endif
             <div class="card-body">
                 <div class="table-responsive">
                     <table width="100%" class="table table-bordered" id="tableLoker">
@@ -45,6 +43,13 @@
             <div class="modal-body">
                 <form id="formVacancy">
                     <div class="container-fluid">
+                        @if(session('userdata')['type'] == 1)
+                        <div class="form-group">
+                            <label for="sponsor_id">Sponsor</label>
+                            <input type="select" class="form-control" name="sponsor_id" id="sponsor_id">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        @endif
                         <div class="form-group">
                             <label for="title">Judul</label>
                             <input type="text" class="form-control" name="title" id="title">

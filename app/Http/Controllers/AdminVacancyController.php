@@ -181,19 +181,25 @@ class AdminVacancyController extends Controller
 
     function store(Request $request)
     {
+        $rules = [
+            'title' => ['required'],
+            'description'   => ['required'],
+            'career_field'  => ['required'],
+            'image'         => ['required']
+        ];
+        if (session('userdata')['type'] == 1) {
+            $rules['sponsor_id'] = ['required'];
+        }
+
         $request->validate(
-            [
-                'title' => ['required'],
-                'description'   => ['required'],
-                'career_field'  => ['required'],
-                'image'         => ['required']
-            ],
+            $rules,
             ['required' => ':attribute harus diisi'],
             [
                 'title' => 'Judul',
                 'description'   => 'Deskripsi',
                 'career_field'  => 'Bidang pekerjaan',
-                'image'         => 'Poster'
+                'image'         => 'Poster',
+                'sponsor_id'    => 'Sponsor'
             ]
         );
 
@@ -201,7 +207,11 @@ class AdminVacancyController extends Controller
             DB::beginTransaction();
             $image = $request->image;
             $namaFileBaru = date('Ymd') . rand(0, 9999) . Str::slug(request('title'), '-') . '.' . request('image')->getClientOriginalExtension();
-            $sponsor_id = DB::table('sponsors')->where('user_id', '=', session('userdata')['id'])->value('id');
+            if (session('userdata')['type'] == 1) {
+                $sponsor_id = request('sponsor_id');
+            } else {
+                $sponsor_id = DB::table('sponsors')->where('user_id', '=', session('userdata')['id'])->value('id');
+            }
             $data = [
                 'title' => request('title'),
                 'description'   => request('description'),

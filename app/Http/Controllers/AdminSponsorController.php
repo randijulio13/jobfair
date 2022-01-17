@@ -164,4 +164,10 @@ class AdminSponsorController extends Controller
         }
         return response()->json($res, $res['status']);
     }
+
+    function select2()
+    {
+        $sponsor = DB::table('sponsors')->where('name', 'like', '%' . request('q') . '%')->get();
+        return response()->json($sponsor);
+    }   
 }

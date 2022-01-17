@@ -46,6 +46,31 @@ $(function () {
         height: "100",
     });
 
+    $("#sponsor_id").select2({
+        dropdownParent: $("#modalVacancy"),
+        width: "100%",
+        theme: "bootstrap4",
+        minimumInputLength: 1,
+        allowClear: true,
+        placeholder: "Pilih Sponsor",
+        ajax: {
+            url: "/admin/sponsor/select2",
+            dataType: "json",
+            delay: 250,
+            cache: true,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: item.name,
+                            id: item.id,
+                        };
+                    }),
+                };
+            },
+        },
+    });
+
     $("#formVacancy").on("submit", function (e) {
         e.preventDefault();
 

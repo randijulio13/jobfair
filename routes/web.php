@@ -137,6 +137,7 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
 
     Route::prefix('sponsor')->middleware('auth.role:1')->group(function () {
         Route::get('', [AdminSponsorController::class, 'index'])->name('sponsor');
+        Route::get('select2',[AdminSponsorController::class,'select2']);
         Route::get('datatables', [AdminSponsorController::class, 'datatables']);
         Route::get('{id}', [AdminSponsorController::class, 'get']);
         Route::post('', [AdminSponsorController::class, 'store']);
