@@ -98,7 +98,7 @@ $(function () {
             icon: "warning",
             confirmButtonColor: "#3085d6",
             showCancelButton: true,
-            confirmButtonText: "Ya, logout",
+            confirmButtonText: "Ya, hapus",
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
