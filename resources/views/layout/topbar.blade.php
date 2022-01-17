@@ -6,7 +6,7 @@
     </div>
     <div class="cta d-none d-md-block">
       @if(!session('userdata_applicant'))
-      <a href="#register" class="scrollto">Daftar</a>
+      <a href="/#register" class="scrollto">Daftar</a>
       @endif
     </div>
   </div>

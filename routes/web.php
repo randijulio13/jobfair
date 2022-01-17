@@ -68,7 +68,13 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
 
     Route::prefix('config')->middleware('auth.role:1')->group(function () {
         Route::get('', [AdminConfigController::class, 'index'])->name('admin.config');
+        Route::get('datatables_banner',[AdminConfigController::class,'datatables_banner']);
+        Route::post('',[AdminConfigController::class,'store_banner']);
+
+        Route::patch('banner/{id}', [AdminConfigController::class, 'update_status_banner']);
         Route::patch('', [AdminConfigController::class, 'update']);
+
+        Route::delete('banner/{id}',[AdminConfigController::class,'delete_banner']);
     });
 
     Route::prefix('message')->group(function () {

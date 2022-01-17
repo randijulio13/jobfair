@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <div class="col-lg-6">
-                        <div class="form-group">
+                            <div class="form-group">
                                 <label for="title_description">Deskripsi Web</label>
                                 <textarea name="title_description" id="title_description" cols="30" rows="8" class="form-control">{{ $config->title_description }}</textarea>
                             </div>
@@ -41,6 +41,53 @@
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary" form="formConfig">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 mt-3">
+        <div class="card">
+            <div class="card-header">Banner Halaman Depan</div>
+            <div class="card-body">
+                <a href="#" class="btn btn-primary mb-4" id="addBanner">Tambah Banner</a>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="tableBanner" width="100%">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>File</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('modal')
+<div class="modal fade" id="modalBanner" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Tambah Banner
+            </div>
+            <div class="modal-body">
+                <form id="formBanner">
+                    <div class="container-fluid">
+                        <label for="file">Pilih Gambar</label>
+                        <input type="file" name="file" id="file" class="form-control">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" form="formBanner" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>

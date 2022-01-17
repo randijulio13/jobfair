@@ -85,3 +85,7 @@
     visibility: visible;
     opacity: 1;
 }
+
+#carouselExampleIndicators {
+    margin-top: 130px;
+}

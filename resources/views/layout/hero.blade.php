@@ -1,4 +1,5 @@
-<section id="hero" class="d-flex justify-cntent-center align-items-center">
+@include('layout.banner')
+<section id="hero" class="d-flex justify-content-center align-items-center">
   <div id="heroCarousel" data-bs-interval="5000" class="container carousel carousel-fade" data-bs-ride="carousel">
     <div class="carousel-item active">
       <div class="carousel-container">

@@ -4,6 +4,7 @@
 
 @section('content')
 @include('layout.hero')
+<!-- @include('layout.banner') -->
 @include('layout.content.about_us')
 @include('layout.content.clients')
 <section id="register" class="cta">
