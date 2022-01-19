@@ -52,10 +52,25 @@ class AdminConfigController extends Controller
                 return $data->id;
             })
             ->addColumn('file', function ($data) {
-                return '<img class="img-fluid" src="/assets/img/banners/' . $data->file . '" width="150px">';
+                if ($data->file)
+                    return '<img class="img-fluid" src="/assets/img/banners/' . $data->file . '" width="150px">';
+                return '<small>Tidak ada gambar</small>';
             })
             ->addColumn('aksi', function ($data) {
-                return '<a class="btn btn-danger btn-sm btn-hapus">Hapus</a>';
+                return '
+                <a class="btn btn-primary btn-sm btn-edit">Edit</a>
+                <a class="btn btn-danger btn-sm btn-hapus">Hapus</a>
+                ';
+            })
+            ->addColumn('title', function ($data) {
+                if($data->title)
+                return $data->title;
+                return '-';
+            })
+            ->addColumn('description', function ($data) {
+                if($data->description)
+                return $data->description;
+                return '-';
             })
             ->addColumn('status', function ($data) {
                 $checked = $data->status ? 'checked'  : '';
