@@ -12,8 +12,9 @@ class LoginController extends Controller
 {
     function index()
     {
+        $config = DB::table('web_config')->where('id','=',1)->first();
         if (!session('userdata_applicant'))
-            return view('login');
+            return view('login',compact('config'));
         return redirect('profile');
     }
 

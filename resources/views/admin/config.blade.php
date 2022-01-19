@@ -25,6 +25,13 @@
                                 <label for="address">Alamat</label>
                                 <textarea name="address" id="address" cols="30" rows="4" class="form-control">{{ $config->address }}</textarea>
                             </div>
+                            <div class="form-group">
+                                <label for="user_register">Pendaftaran User</label>
+                                <select name="user_register" id="user_register" class="form-control">
+                                    <option value="0" {{ $config->user_register == 0 ? 'selected' : '' }}>Nonaktif</option>
+                                    <option value="1" {{ $config->user_register == 1 ? 'selected' : '' }}>Aktif</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">

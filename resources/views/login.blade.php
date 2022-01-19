@@ -23,9 +23,13 @@
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary" form="formLogin">Login</button>
                     </div>
+
+                    @if($config->user_register == 1)
                     <div class="form-group mt-2">
                         <span>Belum punya akun? Registrasi <a href="#" id="btnSignUp">disini</a></span=>
                     </div>
+                    @endif
+
                 </article><!-- End blog entry -->
             </div>
             @include('layout.profile_sidebar')
@@ -36,6 +40,7 @@
 @endsection
 
 @section('modal')
+@if($config->user_register)
 <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
@@ -45,12 +50,12 @@
                     <form id="formDaftarUser">
                         <div class="form-group mb-3">
                             <label for="name">Nama Lengkap</label>
-                            <input type="text" class="form-control" name="name" >
+                            <input type="text" class="form-control" name="name">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group mb-3">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control" name="username" >
+                            <input type="text" class="form-control" name="username">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group mb-3">
@@ -65,12 +70,12 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" name="password" >
+                            <input type="password" class="form-control" name="password">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group mb-3">
                             <label for="password_confirmation">Konfirmasi Password</label>
-                            <input type="password" class="form-control" name="password_confirmation" >
+                            <input type="password" class="form-control" name="password_confirmation">
                             <div class="invalid-feedback"></div>
                         </div>
                     </form>
@@ -82,6 +87,7 @@
         </div>
     </div>
 </div>
+@endif
 @endsection
 
 @section('script')
