@@ -70,20 +70,32 @@ class AdminConfigController extends Controller
 
     function store_banner(Request $request)
     {
-        $request->validate([
-            'file'  => ['required'],
-        ]);
+        if (!$request->has('file') && !$request->description && !$request->title)
+            $request->validate([
+                'file'  => ['required'],
+                'title' => ['required'],
+                'description'   => ['required']
+            ], [
+                'required'  => 'Minimal isi 1 form'
+            ]);
+
 
         try {
             DB::beginTransaction();
-            $image = $request->file;
-            $namaFileBaru = date('Ymd') . rand(0, 9999) . 'Banner' . '.' . request('file')->getClientOriginalExtension();
+            if ($request->has('file')) {
+                $image = $request->file;
+                $namaFileBaru = date('Ymd') . rand(0, 9999) . 'Banner' . '.' . request('file')->getClientOriginalExtension();
+            }
             $data = [
-                'file'      => $namaFileBaru,
+                'title'     => request('title'),
+                'description'   => request('description'),
                 'status'    => 1,
             ];
+            if ($request->has('file')) {
+                $data['file'] = $namaFileBaru;
+                $image->move('assets/img/banners/', $namaFileBaru);
+            }
             DB::table('banners')->insert($data);
-            $image->move('assets/img/banners/', $namaFileBaru);
             DB::commit();
             $res = [
                 'status'    => 201,
@@ -114,13 +126,13 @@ class AdminConfigController extends Controller
     {
         try {
             DB::beginTransaction();
-            $banner = DB::table("banners")->where('id','=',$id)->value('file');
+            $banner = DB::table("banners")->where('id', '=', $id)->value('file');
             if ($banner) {
                 if (file_exists('assets/img/banners/' . $banner)) {
                     unlink('assets/img/banners/' . $banner);
                 };
             }
-            DB::table('banners')->where('id','=',$id)->delete();
+            DB::table('banners')->where('id', '=', $id)->delete();
             DB::commit();
             $res = [
                 'status'    => 201,

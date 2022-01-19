@@ -83,8 +83,14 @@ $(function () {
             $('#modalBanner').modal('hide')
         } catch (err) {
             if (err.status == 422) {
-                errorValidasi(err);
-                Swal.close();
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: 'Minimal 1 form diperlukan',
+                    showConfirmButton: false,
+                    timer: 5000,
+                    timerProgressBar: true,
+                });
             } else {
                 Swal.fire({
                     icon: "error",
@@ -156,6 +162,8 @@ $(function () {
         columns: [
             { data: "DT_RowIndex", class: "text-center" },
             { data: "file", class: "text-center" },
+            { data: "title" },
+            { data: "description" },
             { data: "status", class: "text-center" },
             { data: "aksi", class: "text-center" },
         ],

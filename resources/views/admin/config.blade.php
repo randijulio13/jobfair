@@ -63,6 +63,8 @@
                             <tr>
                                 <th>#</th>
                                 <th>File</th>
+                                <th>Judul</th>
+                                <th>Deskripsi</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -86,9 +88,21 @@
             <div class="modal-body">
                 <form id="formBanner">
                     <div class="container-fluid">
-                        <label for="file">Pilih Gambar</label>
-                        <input type="file" name="file" id="file" class="form-control">
-                        <div class="invalid-feedback"></div>
+                        <div class="form-group">
+                            <label for="file">Pilih Gambar</label>
+                            <input type="file" name="file" id="file" class="form-control">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Judul</label>
+                            <input type="text" name="title" id="title" class="form-control">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Deskripsi</label>
+                            <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
+                            <div class="invalid-feedback"></div>
+                        </div>
                     </div>
                 </form>
             </div>
