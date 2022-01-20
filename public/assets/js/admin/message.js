@@ -29,7 +29,7 @@ $(function () {
         let data = $(this).serialize();
         let id = $("#user_id").val();
         await $.post("/admin/message", data);
-        await $.ajax({
+        let res = await $.ajax({
             url: `/admin/user/${id}`,
             dataType: "json",
             type: "patch",
@@ -40,13 +40,13 @@ $(function () {
         Swal.fire({
             title: "Berhasil",
             icon: "success",
-            html: "Status user diubah menjadi menunggu pembayaran<br>Notifikasi penolakan berhasil dikirim",
+            html: 'Pesan berhasil dikirim',
             timer: 1500,
             showConfirmButton: false,
             timerProgressBar: true,
         });
         $("#message").html("");
-        $("#modalReject").modal("hide");
+        $("#modalReply").modal("hide");
     });
     $("#formReject").on("submit", async function (e) {
         e.preventDefault();
