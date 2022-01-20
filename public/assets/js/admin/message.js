@@ -24,6 +24,30 @@ $(function () {
         $("#modalReject").modal("show");
     });
 
+    $("#formReply").on("submit", async function (e) {
+        e.preventDefault();
+        let data = $(this).serialize();
+        let id = $("#user_id").val();
+        await $.post("/admin/message", data);
+        await $.ajax({
+            url: `/admin/user/${id}`,
+            dataType: "json",
+            type: "patch",
+            data: {
+                status: 3,
+            },
+        });
+        Swal.fire({
+            title: "Berhasil",
+            icon: "success",
+            html: "Status user diubah menjadi menunggu pembayaran<br>Notifikasi penolakan berhasil dikirim",
+            timer: 1500,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        });
+        $("#message").html("");
+        $("#modalReject").modal("hide");
+    });
     $("#formReject").on("submit", async function (e) {
         e.preventDefault();
         let data = $(this).serialize();
@@ -128,4 +152,9 @@ $(function () {
             }
         });
     });
+
+    $('.btnReply').on('click',function(e){
+        e.preventDefault()
+        $('#modalReply').modal('show')
+    })
 });
