@@ -50,6 +50,7 @@
         </div>
     </div>
 
+    @if(!is_silver())
     <div class="col-lg-12">
         <div class="card my-2">
             <div class="card-header">
@@ -74,6 +75,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 @endsection
 

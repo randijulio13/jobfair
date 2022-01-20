@@ -32,8 +32,7 @@ class AuthAdmin
 
         if ($request->is('admin/applicant'))
             if (session('userdata')['type'] == 2) {
-                $sponsor_type = get_sponsor_type(session('userdata')['id']);
-                if ($sponsor_type ==  1)
+                if (is_silver())
                     return redirect('/admin');
             }
         return $next($request);

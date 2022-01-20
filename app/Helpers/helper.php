@@ -47,6 +47,16 @@ function get_sponsor_type($user_id)
     return DB::table('sponsors')->where('user_id', '=', $user_id)->value('type');
 }
 
+function is_silver()
+{
+    $sponsor =  DB::table('sponsors')->where('user_id', '=', session('userdata')['id'])->value('type');
+    if ($sponsor == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function get_user_name($user_id = null)
 {
     if ($user_id == null)
