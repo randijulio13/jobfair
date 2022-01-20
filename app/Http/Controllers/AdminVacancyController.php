@@ -69,9 +69,7 @@ class AdminVacancyController extends Controller
 
     function datatables()
     {
-        $vacancies = DB::table('vacancies')
-            ->select('vacancies.*', 'cf.name as career_field')
-            ->join('career_fields as cf', 'cf.id', '=', 'vacancies.career_field');
+        $vacancies = DB::table('vacancies');
         $sponsor_id = DB::table('sponsors')->where('user_id', '=', session('userdata')['id'])->value('id');
         if (session('userdata')['type'] == 2) {
             $vacancies = $vacancies->where('sponsor_id', '=', $sponsor_id);
@@ -90,14 +88,23 @@ class AdminVacancyController extends Controller
                 <a href="/admin/vacancy/' . $data->id . '" class="btn btn-primary btn-sm btn-detail"><i class="fas fa-eye"></i> Detail</a>
                 </div>';
             })
+            ->addColumn('fields', function ($data) {
+                $fields = DB::table('vacancy_fields as vf')
+                    ->select('vf.*', 'cf.name')
+                    ->join('career_fields as cf', 'cf.id', '=', 'vf.field_id')
+                    ->where('vf.vacancy_id', '=', $data->id)
+                    ->get();
+
+                $str = '';
+                foreach ($fields as $f) {
+                    $str .= '<li>' . $f->name . '</li>';
+                }
+                return '<ul>'.$str.'</ul>';
+            })
             ->addColumn('title', function ($data) {
                 $total = DB::table('vacancy_applicants')->where('vacancy_id', '=', $data->id)->count();
-                return $data->title . '<br><small>
-                <ul>
-                <li>Bidang: ' . $data->career_field . '</li>
-                <li>Pelamar: ' . $total . '</li>
-                </ul>
-                </small>';
+                return $data->title . '<br>
+                <span class="badge badge-primary">'.$total.' Pelamar</span>';
             })
             ->addColumn('status', function ($data) {
                 $checked = $data->status ? 'checked'  : '';
@@ -109,21 +116,21 @@ class AdminVacancyController extends Controller
             ->setRowId(function ($data) {
                 return $data->id;
             })
-            ->rawColumns(['sponsor_image', 'aksi', 'status', 'title', 'image'])
+            ->rawColumns(['sponsor_image', 'aksi', 'status', 'title', 'image','fields'])
             ->toJson();
     }
 
     function detail($id)
     {
         $career_fields = DB::table('career_fields')->get();
+        $vacancy_fields = DB::table('vacancy_fields')->where('vacancy_id', '=', $id)->get();
         $vacancy = DB::table('vacancies as v')
             ->where('v.id', '=', $id)
             ->select('v.*', 's.name as sponsor_name')
             ->join('sponsors as s', 's.id', '=', 'v.sponsor_id')
-            ->join('career_fields as cf', 'cf.id', '=', 'v.career_field')
             ->first();
 
-        return view('admin/vacancy_detail', compact('career_fields', 'vacancy'));
+        return view('admin/vacancy_detail', compact('career_fields', 'vacancy', 'vacancy_fields'));
         return $vacancy;
     }
 
@@ -133,13 +140,13 @@ class AdminVacancyController extends Controller
             [
                 'title' => ['required'],
                 'description'   => ['required'],
-                'career_field'  => ['required']
+                'career_fields'  => ['required']
             ],
             ['required' => ':attribute harus diisi'],
             [
                 'title' => 'Judul',
                 'description'   => 'Deskripsi',
-                'career_field'  => 'Bidang pekerjaan'
+                'career_fields'  => 'Bidang pekerjaan'
             ]
         );
         try {
@@ -148,7 +155,7 @@ class AdminVacancyController extends Controller
             $data = [
                 'title' => request('title'),
                 'description'   => request('description'),
-                'career_field'  => request('career_field'),
+                'career_field'  => 0,
             ];
             if (request()->has('image')) {
                 $image = $request->image;
@@ -156,6 +163,8 @@ class AdminVacancyController extends Controller
                 $data['image']  = $namaFileBaru;
             }
             DB::table('vacancies')->where('id', '=', $id)->update($data);
+            if (!$this->update_fields(request('career_fields'), $id))
+                throw new Exception('Terjadi kesalahan', 400);
             if (request()->has('image')) {
                 $image->move('assets/img/', $namaFileBaru);
                 if ($vacancies->image) {
@@ -179,12 +188,33 @@ class AdminVacancyController extends Controller
         return response()->json($res, $res['status']);
     }
 
+    private function update_fields($fields, $vacancy_id)
+    {
+        DB::beginTransaction();
+        try {
+            $data = [];
+            foreach ($fields as $f) {
+                $data[] = [
+                    'field_id'  => $f,
+                    'vacancy_id'  => $vacancy_id
+                ];
+            }
+            DB::table('vacancy_fields')->where('vacancy_id', '=', $vacancy_id)->delete();
+            DB::table('vacancy_fields')->insert($data);
+            DB::commit();
+            return true;
+        } catch (Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+    }
+
     function store(Request $request)
     {
         $rules = [
             'title' => ['required'],
             // 'description'   => ['required'],
-            'career_field'  => ['required'],
+            'career_fields'  => ['required'],
             'image'         => ['required']
         ];
         if (session('userdata')['type'] == 1) {

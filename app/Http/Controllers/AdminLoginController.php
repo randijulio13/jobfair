@@ -12,7 +12,17 @@ class AdminLoginController extends Controller
 {
     function debug()
     {
-        return session('userdata');
+        $vacan = DB::table('vacancies')->where('career_field', '!=', '0')->get();
+        $vf = [];
+        foreach ($vacan as $v) {
+            $vf[] = [
+                'vacancy_id' => $v->id,
+                'field_id'  => $v->career_field
+            ];
+            DB::table('vacancies')->where('id','=',$v->id)->update(['career_field' => 0]);
+        }
+        DB::table('vacancy_fields')->insert($vf);
+        return count($vf);
     }
 
     function logout()

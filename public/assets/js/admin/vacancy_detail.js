@@ -1,6 +1,9 @@
 $(function () {
     let id = $("#id").val();
     let selectedId;
+    
+    $(".js-example-basic-multiple").select2({});
+
     let table = $("#tableApplicant").DataTable({
         searchDelay: 500,
         processing: true,

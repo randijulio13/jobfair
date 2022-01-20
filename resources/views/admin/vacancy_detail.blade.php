@@ -24,12 +24,17 @@
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group">
-                                <label for="career_field">Bidang Pekerjaan</label>
-                                <select name="career_field" id="career_field" class="form-control">
-                                    <option value="" selected disabled>-- Pilih Bidang Pekerjaan --</option>
+                                <label for="career_fields" class="mb-1">Bidang Pekerjaan</label>
+                                <select class="js-example-basic-multiple form-control" style="width:100%" name="career_fields[]" multiple="multiple">
                                     @foreach($career_fields as $cf)
                                     <?php
-                                    $selected = $cf->id == $vacancy->career_field ? 'selected' : '';
+                                    $isActive = 0;
+                                    foreach ($vacancy_fields as $vf) {
+                                        if ($vf->field_id == $cf->id ? 'selected' : '') {
+                                            $isActive++;
+                                        }
+                                    }
+                                    $selected = $isActive > 0 ? 'selected' : '';
                                     ?>
                                     <option value="{{ $cf->id }}" {{ $selected }}>{{ $cf->name }}</option>
                                     @endforeach

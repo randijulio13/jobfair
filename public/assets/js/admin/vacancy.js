@@ -28,6 +28,7 @@ $(function () {
                 width: "1%",
             },
             { data: "title" },
+            { data: "fields" },
             { data: "status", class: "text-center", orderable: false },
             { data: "aksi", orderable: false, class: "text-center" },
         ],

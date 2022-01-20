@@ -12,8 +12,9 @@ class VacancyController extends Controller
 {
     function index()
     {
-        $vacancies = DB::table('vacancies')
-            ->select('vacancies.*', 'cf.name as career_field', 's.name as nama_sponsor', 's.logo');
+        $vacancies = DB::table('vacancy_fields as vf')
+            ->select('vf.*', 'vacancies.*', 'cf.name as career_field', 's.name as nama_sponsor', 's.logo')
+            ->join('vacancies', 'vacancies.id', '=', 'vf.vacancy_id');
         if (request()->has('field'))
             $vacancies = $vacancies->where('cf.name', 'like', '%' . request('field') . '%');
         if (request()->has('sponsor'))
@@ -27,9 +28,12 @@ class VacancyController extends Controller
             });
         $vacancies = $vacancies->where('vacancies.status', '=', 1)
             ->where('s.status', '=', 1)
-            ->join('career_fields as cf', 'cf.id', '=', 'vacancies.career_field')
+            ->join('career_fields as cf', 'cf.id', '=', 'vf.field_id')
             ->join('sponsors as s', 's.id', '=', 'vacancies.sponsor_id')
+            // ->get();
             ->paginate(9);
+        // return $vacancies;
+
         // return $vacancies;
         return view('vacancy', compact('vacancies'));
     }
@@ -43,11 +47,12 @@ class VacancyController extends Controller
             $isSent = 0;
         }
         $vacancy = DB::table('vacancies')->where('vacancies.id', '=', $id)
-            ->select('vacancies.*', 'cf.name as career_field', 's.name as nama_sponsor', 's.logo','s.description as sponsor_description')
-            ->join('career_fields as cf', 'cf.id', '=', 'vacancies.career_field')
+            ->select('vacancies.*', 's.name as nama_sponsor', 's.logo', 's.description as sponsor_description')
             ->join('sponsors as s', 's.id', '=', 'vacancies.sponsor_id')
             ->first();
-        return view('vacancy_detail', compact('vacancy', 'isSent'));
+
+        $fields = DB::table('vacancy_fields as vf')->select('cf.name', 'vf.*')->join('career_fields as cf', 'cf.id', '=', 'vf.field_id')->where('vacancy_id', '=', $id)->get();
+        return view('vacancy_detail', compact('vacancy', 'isSent','fields'));
     }
 
     function store()

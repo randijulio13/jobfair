@@ -17,6 +17,7 @@
                                 <th>Perusahaan</th>
                                 <th>Poster</th>
                                 <th>Loker</th>
+                                <th>Bidang</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>

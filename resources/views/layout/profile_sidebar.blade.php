@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\DB;
 
 $categories = DB::table('career_fields')->select(
     'career_fields.*',
-    DB::raw('(SELECT COUNT(*) FROM vacancies WHERE vacancies.career_field = career_fields.id and vacancies.status = 1) as total')
+    DB::raw('(SELECT COUNT(*) FROM vacancy_fields as vf INNER JOIN vacancies as v on v.id = vf.vacancy_id WHERE vf.field_id = career_fields.id and v.status = 1) as total')
 )->get();
 ?>
 
