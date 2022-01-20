@@ -5,7 +5,7 @@ $(function () {
         e.preventDefault();
         $(".is-invalid").removeClass("is-invalid");
         let data = new FormData(this);
-        mySwalLoading()
+        mySwalLoading();
         $.ajax({
             type: "post",
             url: "/profile",
@@ -29,7 +29,7 @@ $(function () {
             })
             .catch((err) => {
                 if (err.status == 422) {
-                    Swal.close()
+                    Swal.close();
                     errorValidasi(err);
                 } else {
                     mySwal.fire({
@@ -61,25 +61,32 @@ $(function () {
             contentType: false,
             cache: false,
             dataType: "json",
-        }).then(async (res) => {
-            await Swal.fire({
-                icon: "success",
-                title: "Berhasil",
-                text: "Bukti pembayaran anda berhasil disubmit",
-                timer: 1500,
-                showConfirmButton: false,
-                timerProgressBar: true,
+        })
+            .then(async (res) => {
+                await Swal.fire({
+                    icon: "success",
+                    title: "Berhasil",
+                    text: "Bukti pembayaran anda berhasil disubmit",
+                    timer: 1500,
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                });
+                window.location.reload();
+            })
+            .catch((err) => {
+                mySwal.fire({
+                    title: "Error",
+                    icon: "error",
+                    text: err.responseJSON.message,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             });
-            window.location.reload();
-        }).catch((err)=>{
-            mySwal.fire({
-                title: "Error",
-                icon: "error",
-                text: err.responseJSON.message,
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
+    });
+
+    $("#tokenActivation").on("submit", function (e) {
+        e.preventDefault();
+        let data = $(this).serialize();
     });
 
     $("#gantiPassword").on("click", function (e) {
@@ -95,9 +102,42 @@ $(function () {
         $("#old_password").focus();
     });
 
+    $("#tokenActivation").on("submit", async function (e) {
+        e.preventDefault();
+        $(this).find(".is-invalid").removeClass("is-invalid");
+        let data = $(this).serialize();
+        try {
+            let res = await $.ajax({
+                type: "patch",
+                url: "/profile/token",
+                data,
+                dataType: "json",
+            });
+            await Swal.fire({
+                icon: "success",
+                title: "Berhasil",
+                text: res.message,
+                timer: 1500,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+            window.location.reload();
+        } catch (err) {
+            if (err.status == 422) return errorValidasi(err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: err.responseJSON.message,
+                timer: 5000,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+        }
+    });
+
     $("#formAccount").on("submit", async function (e) {
         e.preventDefault();
-        $(this).find('.is-invalid').removeClass('is-invalid')
+        $(this).find(".is-invalid").removeClass("is-invalid");
         let data = $(this).serialize();
         try {
             let res = await $.ajax({

@@ -142,6 +142,36 @@ class ProfileController extends Controller
         return true;
     }
 
+    function token_activation(Request $request)
+    {
+        $request->validate([
+            'token' => ['required']
+        ], [
+            'Masukkan token'
+        ]);
+        try {
+            $check = DB::table('applicant_tokens')->where('token', '=', request('token'))->count();
+            if ($check == 0)
+                throw new Exception('Token tidak ditemukan!', 404);
+
+            $id = session('userdata_applicant')['id'];
+            DB::beginTransaction();
+            DB::table('users')->where('id', '=', $id)->update(['status' => 1]);
+            DB::table('applicant_tokens')->where('token', '=', request('token'))->delete();
+            DB::commit();
+            return response()->json([
+                'status'    => 200,
+                'message'   => 'Token ditemukan, akun berhasil diaktifkan'
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status'    => $e->getCode(),
+                'message'   => $e->getMessage()
+            ], 400);
+        }
+    }
+
     function vacancy_history()
     {
         $id = get_applicant_id(session('userdata_applicant')['id']);

@@ -24,6 +24,9 @@
                         <article class="entry">
                             <div class="entry-title">Upload Bukti Pembayaran</div>
                             <div class="entry-content">
+                                <div class="alert alert-secondary">
+                                    <small>Silahkan lakukan pembayaran (lihat <b>Cara Pembayaran</b>) dan upload bukti transfer disini.</small>
+                                </div>
                                 <form id="formPembayaran">
                                     <div class="form-group mb-4">
                                         <input type="file" class="form-control" name="attachment" accept="image/*">
@@ -31,7 +34,24 @@
                                     <a href="#" class="btnPayment btn btn-secondary">Cara pembayaran</a>
                                     <button type="submit" class="btn btn-primary"> Submit</button>
                                 </form>
+                                <hr>
+                                <div class="alert alert-secondary"><small>
+                                        Atau aktivasi menggunakan token disini.
+                                    </small></div>
+                                <form id="tokenActivation">
+                                    <div class="form-group">
+                                        <label for="token">Token</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" id="token" name="token" class="form-control" placeholder="Masukkan token disini">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit">Submit</button>
+                                            </div>
+                                        </div>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </form>
                             </div>
+
                         </article>
                     </div>
                 </div>

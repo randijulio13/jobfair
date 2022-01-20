@@ -53,6 +53,7 @@ Route::prefix('profile')->middleware('auth.applicant')->group(function () {
     Route::delete('notification/{id}', [ProfileController::class, 'delete_notif']);
     Route::patch('', [ProfileController::class, 'update_account']);
     Route::patch('password', [ProfileController::class, 'password']);
+    Route::patch('token',[ProfileController::class,'token_activation']);
     Route::post('payment', [ProfileController::class, 'payment']);
     Route::post('', [ProfileController::class, 'update']);
 });
