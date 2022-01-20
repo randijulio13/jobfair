@@ -22,9 +22,9 @@
             <div class="col-lg-3 text-center">
                 <button id="btnFormToken" class="btn-block form-control btn btn-warning" form="formToken" type="submit">Submit</butotn>
             </div>
-            <div class="col-lg-12">
+            <!-- <div class="col-lg-12">
                 <a href="#" class="text-white">Belum mempunyai nomor token?</a>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>
