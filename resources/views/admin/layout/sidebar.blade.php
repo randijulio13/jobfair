@@ -61,6 +61,7 @@ $sponsor_type = get_sponsor_type(session('userdata')['id']);
     <?php
     $new  = Illuminate\Support\Facades\DB::table('new_messages')->where('user_id', '=', session('userdata')['id'])->count();
     ?>
+    @if(!is_silver())
     <li class="nav-item {{ Request::routeIs('admin.message') || Request::routeIs('admin.message_detail')  ? 'active' : '' }}">
         <a class="nav-link" href="/admin/message">
             <i class="fa fa-envelope fa-fw" aria-hidden="true"></i>
@@ -70,6 +71,7 @@ $sponsor_type = get_sponsor_type(session('userdata')['id']);
             @endif
         </a>
     </li>
+    @endif
     @if(session('userdata')['type'] == 1)
     <li class="nav-item {{ Request::routeIs('admin.config')   ? 'active' : '' }}">
         <a class="nav-link" href="/admin/config">
