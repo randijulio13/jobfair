@@ -1,3 +1,6 @@
+<?php
+$sponsor_type = get_sponsor_type(session('userdata')['id']);
+?>
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
         <div class="sidebar-brand-icon rotate-n-15">
@@ -11,11 +14,13 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
+    @if($sponsor_type != 1)
     <li class="nav-item {{ Request::routeIs('applicant') ? 'active' : '' }}">
         <a class="nav-link" href="/admin/applicant">
             <i class="fa fa-fw fa-users" aria-hidden="true"></i>
             <span>Data Pelamar</span></a>
     </li>
+    @endif
     <li class="nav-item {{ Request::routeIs('admin.vacancy') || Request::routeIs('admin.detail.vacancy')  ? 'active' : '' }}">
         <a class="nav-link" href="/admin/vacancy">
             <i class="fa fa-suitcase fa-fw" aria-hidden="true"></i>
