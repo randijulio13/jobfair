@@ -62,15 +62,14 @@
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group">
-                            <label for="career_field">Bidang Pekerjaan</label>
-                            <select name="career_field" id="career_field" class="form-control">
-                                <option value="" selected disabled>-- Pilih Bidang Pekerjaan --</option>
-                                @foreach($career_fields as $cf)
-                                <option value="{{ $cf->id }}">{{ $cf->name }}</option>
-                                @endforeach
-                            </select>
-                            <div class="invalid-feedback"></div>
-                        </div>
+                                <label for="career_fields" class="mb-1">Bidang Pekerjaan</label>
+                                <select class="js-example-basic-multiple form-control" style="width:100%" name="career_fields[]" multiple="multiple">
+                                    @foreach($career_fields as $cf)
+                                    <option value="{{ $cf->id }}">{{ $cf->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback"></div>
+                            </div>
                         <div class="form-group">
                             <label for="image">Poster</label>
                             <input type="file" class="form-control" name="image" id="image">

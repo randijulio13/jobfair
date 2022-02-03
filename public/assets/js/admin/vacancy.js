@@ -1,5 +1,7 @@
 $(function () {
     let selectedId;
+    $(".js-example-basic-multiple").select2({});
+
 
     let table = $("#tableLoker").DataTable({
         processing: true,
