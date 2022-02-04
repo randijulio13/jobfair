@@ -264,7 +264,7 @@ class AdminVacancyController extends Controller
                 'message'   => $e->getMessage() ?? 'Terjadi kesalahan'
             ];
         }
-        return response()->json($res, $res['status']);
+        return response()->json($res);
     }
 
     function update_status($id)
